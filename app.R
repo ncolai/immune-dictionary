@@ -1,5 +1,5 @@
-options(shiny.maxRequestSize = 7000 * 1024^5)
-options (future.globals.maxSize = 4000 * 1024^5)
+options(shiny.maxRequestSize = 14000 * 1024^5)
+options (future.globals.maxSize = 8000 * 1024^5)
 library(shiny)
 library(dplyr)
 library(Seurat)
