@@ -1,0 +1,14 @@
+B_cell
+cDC1
+cDC2
+eTAC
+Macrophage
+MigDC
+Monocyte
+Neutrophil
+NK_cell
+pDC
+T_cell_CD4
+T_cell_CD8
+T_cell_gd
+Treg
