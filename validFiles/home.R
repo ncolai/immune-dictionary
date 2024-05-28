@@ -14,28 +14,50 @@ output$pageStub <- renderUI(tagList(
         font-size: 16px;
       }
       
-      .paper-link {
-        position:relative;
-        top: 200px;
+      .center {
+        font-size: 8px;
+        display: block;
+        margin-top: 3%;
+        margin-left: auto;
+        margin-right: auto;
+        width: 75%;
+        height: 50%;
       }"),
-
+  HTML('<br>'),
   div(
     id = "title",
-    "Immune Dictionary"
+    strong("Welcome to the Immune Dictionary Portal!")
   ),
   div(
     id = "description",
-    "Cytokines mediate cell-cell communication in the immune system and represent important therapeutic targets. While there have been in-depth studies of individual cytokines, we lack a global view of the responses of each immune cell type to each cytokine. To address this gap we created the Immune Dictionary – a compendium of single-cell transcriptomic profiles of over 20 cell types in response to each of 86 cytokines in murine lymph nodes in vivo. Based on the dictionary, we developed companion software, Immune Response Enrichment Analysis (IREA), for assessing cytokine activities and immune cell polarization from transcriptomic data, and applied it to reveal cytokine networks in tumors following immune checkpoint blockade therapy. Our dictionary generates new hypotheses for cytokine functions, illuminates pleiotropic effects of cytokines, expands our knowledge of activation states in each immune cell type, and provides a framework to deduce the roles of specific cytokines and cell-cell communication networks in any immune response."
+    "The Immune Dictionary is a compendium of single-cell transcriptomic profiles of over 17 cell types in response to each of 86 cytokines."
   ),
+  HTML('<br><br><br>'),
   p( style="text-align:center",
-    a(
-      "This will be the link to the paper",
-      target = "_blank",
-      href = "https://www.google.com/",
-      class = "paper-link"
-    )
-  )
-  # Maybe transfer into another file when UI is figured out
-  
-  # includeHTML("htmlFiles/home.html")
+     "More Details on the Publication:",
+     HTML("<br>Cui, A. et al., Dictionary of immune responses to cytokines at single-cell resolution. <b>Nature</b>. "),
+     a(
+       "https://doi.org/10.1038/s41586-023-06816-9",
+       target = "_blank",
+       href = "https://doi.org/10.1038/s41586-023-06816-9",
+       class = "paper-link"
+     ),
+     "(2023)"
+  ),
+  HTML(''),
+  img(
+    class = 'center',
+    src = "coverImage.png", 
+    alt = "Cytokines Cover Image",
+  ),
+  div(
+    id = "description",
+    "Immune Response Enrichment Analysis (IREA) is the companion software for the Immune Dictionary. IREA assesses cytokine activities, immune cell polarization, and cell-cell communication from user transcriptomic data."
+  ),
+  HTML('<br><br>'),
+  img(
+    class = 'center',
+    src = "IREACoverImage.png", 
+    alt = "IREA Cover Image",
+  ),
 ))
