@@ -19,11 +19,13 @@ observeEvent(input$umap_submit, {
     input_celltype = input$umap_featureInput1
     #logjs(paste('This is a test message!!!!', input_celltype))
     if (is.null(lig_seurat[[input_celltype]])){
-      print('loading data')
+      #print('loading data')
       #file_name = paste0('dataFiles/celltype/200417-ligands-alldata-seurat-p3-', input$umap_featureInput1, '.rds', sep = '')
       #lig_seurat[[input_celltype]] <- readRDS(file_name)
       file_name <- paste0("dataFiles/celltypeSmallUmap/",input$umap_featureInput1,".qs")
       lig_seurat[[input_celltype]] <- qread(file_name)
+      Idents(lig_seurat[[input_celltype]]) <- "cluster" #fix docker img issue
+      #print('data is loaded!!!')
     }
     
     if (input$umap_featureInput2 == 'ALL'){

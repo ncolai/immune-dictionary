@@ -1,6 +1,5 @@
-
 observeEvent(input$violinSample,{
-  updateSelectInput(session,
+  updateSelectizeInput(session,
                     "violinInputGene",
                     choices=geneList,
                     server=TRUE,
@@ -207,23 +206,25 @@ submit_btn_celltype2 <- observeEvent(input$violinSubmit,{
     showNotification('Please enter in cytokines.', type = 'error')
   }
   else if (input$violin_type_cytokines == 'all'){
-    # var_name <- paste0("ft2_", input$cellType2)
-    # if (exists(var_name)) {
-    #   ft2 <- get(var_name)
-    # } else if (is.null(lig_seurat[[input$cellType2]])) {
-    #   ft2 <- fst(paste0("dataFiles/celltype_fst_additionalcompress/200417-ligands-alldata-seurat-p3-", 
-    #                                                                       input$cellType2, ".rds.fst", sep = ''))
-    # }
-    # plot_df = ft2[c(input$violinInputGene, 'celltype', 'sample', 'rep')]
-    # plot_df_melt = reshape2::melt(plot_df, id.vars = names(subset(plot_df, select = c('celltype','sample','rep'))))
-    # data$violin_all_data <- plot_df_melt[c('celltype', 'sample', 'rep', 'variable', 'value')]
+    var_name <- paste0("ft2_", input$cellType2)
+    if (exists(var_name)) {
+      ft2 <- get(var_name)
+    } else if (is.null(lig_seurat[[input$cellType2]])) {
+      #ft2 <- fst(paste0("dataFiles/celltype_fst_additionalcompress/200417-ligands-alldata-seurat-p3-", 
+      ft2 <- fst(paste0("dataFiles/celltype_fst/200417-ligands-alldata-seurat-p3-", 
+                                                                          input$cellType2, ".rds.fst", sep = ''))
+    }
+    plot_df = ft2[c(input$violinInputGene, 'celltype', 'sample', 'rep')]
+    plot_df_melt = reshape2::melt(plot_df, id.vars = names(subset(plot_df, select = c('celltype','sample','rep'))))
+    data$violin_all_data <- plot_df_melt[c('celltype', 'sample', 'rep', 'variable', 'value')]
 
     preloaded_figures <- lapply(input$violinInputGene, function(myGene) {
-      fig <- qread(file.path("dataFiles/violin_plot_creation/", input$cellType2, "/", paste0(input$cellType2, "_violin_plot_", myGene, ".qs")))
+      #fig <- qread(file.path("dataFiles/violin_plot_creation", input$cellType2, paste0(input$cellType2, "_violin_plot_", myGene, ".qs")))
+      fig <- qread(file.path("/datadir/violin_plot_creation",input$cellType2, paste0(input$cellType2, "_violin_plot_", myGene, ".qs")))
     }) 
-    preloaded_figures %>% lapply(function(fig) {
-      plotly_data(fig)
-    }) %>% bind_rows() -> data$violin_all_data
+    #preloaded_figures %>% lapply(function(fig) {
+      #plotly_data(fig)
+    #}) %>% bind_rows() -> data$violin_all_data
     violin_plot_results <- lapply(preloaded_figures, function(fig) {
       # filtered_df_all <- subset(plot_df_melt, variable == myGene)
       # filtered_df_all[filtered_df_all<0] = 0

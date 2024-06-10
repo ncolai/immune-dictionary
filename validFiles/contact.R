@@ -1,5 +1,5 @@
-library(mailR)
-library(rJava)
+#library(rJava)
+#library(mailR)
 
 css <- ".shiny-notification {
           position:fixed;
