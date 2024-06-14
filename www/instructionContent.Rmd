@@ -1,0 +1,202 @@
+# Immune Dictionary Instructions
+
+_Note: Please be patient with our program as loading the data files takes some time. However, if something takes more than 30 seconds, email us to let us know!_
+
+## [Data Browser](#top)
+
+We have two sections: **Gene Expression** and **Differential Gene Expression**. **Gene Expression** shows the expression level of user input genes in each treatment condition. **Differential Gene Expression** shows the relative expression level between cytokine treatment and PBS control treatment.
+
+#### Features and Visualizations 
+
+### <u> Violin Plot/Box Plot </u>
+
+Our violin plot and box plot show gene expression in cells treated with various cytokines.
+
+**How to Use**:
+
+1. **Select Genes**:
+    - Choose a valid set of genes you are interested in.
+    - Optionally, use the sample genes button to select a random set of genes.
+    - Clear the selected genes using the clear button.
+
+2. **Select Cell Type**:
+    - Choose the cell type of interest from the dropdown list.
+
+3. **Select Cytokines**:
+    - Choose either to include all cytokines or input specific cytokines.
+    - If selecting specific cytokines, choose them from the dropdown list.
+
+4. **Submit**:
+    - Press the submit button to generate the plots to visualize gene expression levels across cytokine treatments.
+
+5. **Download Results**:
+    - You can download the results as a CSV file and the plot as a PDF file.
+
+Please see **Figure 3p** of our paper as an example.
+
+### <u>UMAP</u>
+
+UMAP, _Uniform Manifold Approximation and Projection_, projects high-dimensional data onto two dimensions, showing the relative positions of cells under different treatments.
+
+**How to Use**:
+
+1. **Select Cell Type**: 
+   - Choose the cell type for the UMAP projection.
+   
+2. **Select Cytokine**: 
+   - Choose the cytokine treatment from the dropdown list.
+   
+3. **Optional Gene Expression**: 
+   - Optionally, check the expression level of a specific gene.
+   
+4. **Submit**: 
+   - Press the submit button to generate the UMAP visualization.
+
+### <u>Bar Graph</u>
+
+Our bar graph shows the differential gene expression in a cell after cytokine treatment.
+
+**How to Use**:
+
+1. **Select Cell Type**:
+   - Choose the cell type of interest from the dropdown list.
+   
+2. **Select Cytokine**:
+   - Choose the cytokine treatment from the dropdown list.
+   
+3. **Submit**:
+   - Press the submit button to generate the bar graph to visualize differential gene expression.
+
+### <u>Heat Map</u>
+
+The heatmap shows differential gene expression for genes above a certain cutoff.
+
+**How to Use**: 
+
+1. **Select Genes**: 
+   - Use the input field to enter the genes you want to include in the heat map. 
+   - Optionally, use the sample genes button to select a random set of genes. 
+   - Clear the selected genes using the clear button. 
+   
+2. **Select Cell Type**:  
+   - Choose the cell type for the heat map from the dropdown list. 
+   
+3. **Select Cytokine**:  
+   - Choose either to include all cytokines or input specific cytokines. 
+   - If selecting specific cytokines, choose them from the dropdown list. 
+   
+4. **Submit**:  
+   - Press the submit button to visualize differential gene expression in the heat map. 
+
+## [IREA Software](#top)
+
+Immune Response Enrichment Analysis (IREA) is the companion software for the Immune Dictionary. It compares user gene expression data with the Immune Dictionary reference data to predict which cytokines are most active in the user data. The analysis is similar to GO pathway enrichment analysis but is much more refined for studying immune processes. User data can be obtained from disease, treatment, vaccination, or any immune process.
+
+#### Features and Visualizations 
+
+### <u> Gene List </u>
+
+A list of pre-computed genes that are known to be associated with the immune process of interest. For example, users can compute a list of differentially expressed genes from their data (obtained from DESeq2 or Seurat FindMarkers) and enter them into the box.
+
+**How to Use**:
+
+1. **Input Genes**:
+    - Enter your genes in the text area provided.
+    - You can also use the sample genes button to populate the area with example genes.
+    - Clear the selected genes using the clear button.
+
+2. **Choose Cell Type**:
+    - Select the cell type from the dropdown list.
+
+3. **Select Species**:
+    - Choose either "Mouse" or "Human" from the species options.
+
+4. **Optional Parameters**:
+    - Click the ‘Optional Parameters’ button to reveal additional settings.
+
+5. **Submit**:
+    - Click “Analyze Cell Polarization” or “Analyze Cytokine Response” to perform the analysis.
+
+6. **Results**:
+    - Interpretation of results can be referenced in the “Reference Cards” tab.
+
+### <u>Gene Matrix</u>
+
+The relative gene expression level of an immune process vs. control for each gene. Please download the example file to see the format.
+
+**How to Use**:
+
+1. **Upload Gene Matrix File**:
+    - Upload your gene matrix file in .txt, .xlsx, or .xls format.
+    - Alternatively, you can use the example file by toggling the “Use Example File” switch.
+
+2. **Choose Cell Type**:
+    - Select the cell type from the dropdown list.
+
+3. **Optional Parameters**:
+    - Click the ‘Optional Parameters’ button to reveal additional settings.
+
+4. **Submit**:
+    - Click “Analyze Cell Polarization” or “Analyze Cytokine Response” to perform the analysis.
+
+5. **Results**:
+    - Analysis might take 5-10 minutes. Results will be available upon completion.
+
+### <u>Cytokine Network Analysis</u>
+
+In this analysis, we can analyze gene matrix files from at least two cell types for Cytokine Network Analysis.
+
+**How to Use**:
+
+1. **Upload Gene Matrix Files**:
+    - Upload gene matrix files for at least two cell types.
+    - Example files are available for different cell types (e.g., B cell, CD4+ T cell, etc.).
+
+2. **Optional Parameters**:
+    - Click the ‘Optional Parameters’ button to reveal additional settings.
+
+3. **Submit**:
+    - Click “Analyze Cytokine Network” to perform the analysis.
+
+4. **Results**:
+    - Analysis might take approximately 10 minutes per cell type. Results will be available upon completion.
+    
+## [Reference Cards](#top) 
+The Immune dictionary application displays reference cards for various immune cell polarization states as described in the publication "Dictionary of immune responses to cytokines at single-cell resolution."
+
+**How to Use**:
+
+1. **Select Cell Type**:
+    - Use the radio buttons on the left panel to choose a cell type from the provided list.
+    - The list includes various immune cell types, with the option "Summary of all cell types" at the top.
+
+2. **View Reference Card**:
+    - After selecting a cell type, the corresponding reference card will be displayed in the main panel.
+    - The reference card is shown in a PDF format within an iframe for easy viewing.
+
+#### Features and Visualizations
+
+- **User-Friendly Interface**: The app provides an easy-to-use interface to view reference cards for different immune cell types.
+- **Comprehensive Cell List**: Includes a wide range of cell types with an option to view a summary of all cell types.
+- **Interactive Selection**: Allows users to interactively select cell types and immediately view the corresponding reference card.
+- **PDF Format**: Displays reference cards in a PDF format for clear and detailed viewing.
+
+## [Download](#top) 
+The Immune Dictionary Portal allows users to download various data files related to immune cell analysis. Users can easily select and download the files they need.
+
+**How to Use**:
+
+1. **Access the Download Page**:
+    - When you open the app, click on the download page.
+
+2. **Select Files to Download**:
+    - The app displays a list of available data files for download.
+    - Each file has a corresponding download link, displayed with an image icon.
+
+3. **Download Files**:
+    - Click on the download link next to the file you want to download.
+    - The file will be downloaded in a compressed format for efficient storage and transfer.
+    
+## [Contact Us](#top)
+If you have any comments or concerns, please do not hesitate to reach out to us at: "ImmuneDictionary\@gmail.com"
+
