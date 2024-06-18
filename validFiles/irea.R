@@ -163,246 +163,247 @@ output$pageStub <- renderUI(fluidPage(
                            
                            # HTML("<br>"),
                            # actionButton("submit_network_matrix", "To be announced!", class = "btn-block")
-                  ), 
-                  tabPanel("Network", value = "C",
-                           h3(),
-                           HTML('<br>'),     
-                           
-                           # tags$script(HTML(jscode_upload_txt)),
-                           div(style=
-                                 'padding: 0;
-                        margin: 0;
-                        color: black;
-                        font-weight: bold;
-                        font-size: 1em;
-                        white-space: normal;
-                        width: 100%;
-                        text-align: left;
-                        margin-bottom: 5px;',
-                               HTML('Upload Gene Matrix Files for at least 2 cell types for the Cytokine Network Analysis')
-                           ),
-                           HTML('<br>'),
-                           HTML('<hr>'),
-                           h4("B cell"),
-                           fileInput("network_matrix_file_B_cell", label = NULL,
-                                     multiple = FALSE,
-                                     accept = c(".txt", ".xlsx", ".xls")),
-                           materialSwitch(
-                             inputId = "sample_network_matrix_B_cell",
-                             label = "Use Example File", 
-                             status = "primary",inline = TRUE,
-                             right = TRUE
-                           ),
-                           
-                           div(style='overflow-x: auto;',
-                               downloadButton("download_network_matrix", "Download Example File", class = "btn-link")),
-                           HTML('<br>'),
-                           HTML('<hr>'),
-                           
-                           HTML('<br>'), 
-                           h4("CD4+ T cell"),
-                           fileInput("network_matrix_file_T_cell_CD4", label = NULL,
-                                     multiple = FALSE,
-                                     accept = c(".txt", ".xlsx", ".xls")),
-                           materialSwitch(
-                             inputId = "sample_network_matrix_T_cell_CD4",
-                             label = "Use Example File", 
-                             status = "primary",inline = TRUE,
-                             right = TRUE
-                           ),
-                           HTML('<br>'),
-                           HTML('<hr>'), 
-                           
-                           HTML('<br>'), 
-                           h4("CD8+ T cell"),
-                           fileInput("network_matrix_file_T_cell_CD8", label = NULL,
-                                     multiple = FALSE,
-                                     accept = c(".txt", ".xlsx", ".xls")),
-                           materialSwitch(
-                             inputId = "sample_network_matrix_T_cell_CD8",
-                             label = "Use Example File", 
-                             status = "primary",inline = TRUE,
-                             right = TRUE
-                           ),
-                           HTML('<br>'),                          
-                           HTML('<hr>'), 
-                           
-                           HTML('<br>'), 
-                           h4("γδ T cell"),
-                           fileInput("network_matrix_file_T_cell_gd", label = NULL,
-                                     multiple = FALSE,
-                                     accept = c(".txt", ".xlsx", ".xls")),
-                           materialSwitch(
-                             inputId = "sample_network_matrix_T_cell_gd",
-                             label = "Use Example File", 
-                             status = "primary",inline = TRUE,
-                             right = TRUE
-                           ),
-                           HTML('<br>'),          
-                           HTML('<hr>'), 
-                           
-                           HTML('<br>'), 
-                           h4("Treg"),
-                           fileInput("network_matrix_file_Treg", label = NULL,
-                                     multiple = FALSE,
-                                     accept = c(".txt", ".xlsx", ".xls")),
-                           materialSwitch(
-                             inputId = "sample_network_matrix_Treg",
-                             label = "Use Example File", 
-                             status = "primary",inline = TRUE,
-                             right = TRUE
-                           ),
-                           HTML('<br>'),     
-                           HTML('<hr>'), 
-                           
-                           HTML('<br>'), 
-                           h4("NK cell"),
-                           fileInput("network_matrix_file_NK_cell", label = NULL,
-                                     multiple = FALSE,
-                                     accept = c(".txt", ".xlsx", ".xls")),
-                           materialSwitch(
-                             inputId = "sample_network_matrix_NK_cell",
-                             label = "Use Example File", 
-                             status = "primary",inline = TRUE,
-                             right = TRUE
-                           ),
-                           HTML('<br>'),     
-                           HTML('<hr>'), 
-                           
-                           HTML('<br>'), 
-                           h4("pDC"),
-                           fileInput("network_matrix_file_pDC", label = NULL,
-                                     multiple = FALSE,
-                                     accept = c(".txt", ".xlsx", ".xls")),
-                           materialSwitch(
-                             inputId = "sample_network_matrix_pDC",
-                             label = "Use Example File", 
-                             status = "primary",inline = TRUE,
-                             right = TRUE
-                           ),
-                           HTML('<br>'),   
-                           HTML('<hr>'), 
-                           
-                           HTML('<br>'), 
-                           h4("cDC1"),
-                           fileInput("network_matrix_file_cDC1", label = NULL,
-                                     multiple = FALSE,
-                                     accept = c(".txt", ".xlsx", ".xls")),
-                           materialSwitch(
-                             inputId = "sample_network_matrix_cDC1",
-                             label = "Use Example File", 
-                             status = "primary",inline = TRUE,
-                             right = TRUE
-                           ),
-                           HTML('<br>'),   
-                           HTML('<hr>'), 
-                           
-                           HTML('<br>'), 
-                           h4("cDC2"),
-                           fileInput("network_matrix_file_cDC2", label = NULL,
-                                     multiple = FALSE,
-                                     accept = c(".txt", ".xlsx", ".xls")),
-                           materialSwitch(
-                             inputId = "sample_network_matrix_cDC2",
-                             label = "Use Example File", 
-                             status = "primary",inline = TRUE,
-                             right = TRUE
-                           ),
-                           HTML('<br>'),   
-                           HTML('<hr>'), 
-                           
-                           HTML('<br>'), 
-                           h4("MigDC"),
-                           fileInput("network_matrix_file_MigDC", label = NULL,
-                                     multiple = FALSE,
-                                     accept = c(".txt", ".xlsx", ".xls")),
-                           materialSwitch(
-                             inputId = "sample_network_matrix_MigDC",
-                             label = "Use Example File", 
-                             status = "primary",inline = TRUE,
-                             right = TRUE
-                           ),
-                           HTML('<br>'), 
-                           HTML('<hr>'), 
-                           
-                           HTML('<br>'), 
-                           h4("Langerhans"),
-                           fileInput("network_matrix_file_Langerhans", label = NULL,
-                                     multiple = FALSE,
-                                     accept = c(".txt", ".xlsx", ".xls")),
-                           materialSwitch(
-                             inputId = "sample_network_matrix_Langerhans",
-                             label = "Use Example File", 
-                             status = "primary",inline = TRUE,
-                             right = TRUE
-                           ),
-                           HTML('<br>'), 
-                           HTML('<hr>'), 
-                           
-                           HTML('<br>'), 
-                           h4("Macrophage"),
-                           fileInput("network_matrix_file_Macrophage", label = NULL,
-                                     multiple = FALSE,
-                                     accept = c(".txt", ".xlsx", ".xls")),
-                           materialSwitch(
-                             inputId = "sample_network_matrix_Macrophage",
-                             label = "Use Example File", 
-                             status = "primary",inline = TRUE,
-                             right = TRUE
-                           ),
-                           HTML('<br>'), 
-                           HTML('<hr>'), 
-                           
-                           HTML('<br>'), 
-                           h4("Monocyte"),
-                           fileInput("network_matrix_file_Monocyte", label = NULL,
-                                     multiple = FALSE,
-                                     accept = c(".txt", ".xlsx", ".xls")),
-                           materialSwitch(
-                             inputId = "sample_network_matrix_Monocyte",
-                             label = "Use Example File", 
-                             status = "primary",inline = TRUE,
-                             right = TRUE
-                           ),
-                           HTML('<br>'), 
-                           HTML('<hr>'), 
-                           
-                           HTML('<br>'), 
-                           h4("Neutrophil"),
-                           fileInput("network_matrix_file_Neutrophil", label = NULL,
-                                     multiple = FALSE,
-                                     accept = c(".txt", ".xlsx", ".xls")),
-                           materialSwitch(
-                             inputId = "sample_network_matrix_Neutrophil",
-                             label = "Use Example File", 
-                             status = "primary",inline = TRUE,
-                             right = TRUE
-                           ),
-                           HTML('<br>'), 
-
-                           
-                           h3(),
-                           HTML('<hr>'),
-                           actionButton("dropdown_btn3", label = ' Optional Parameters', icon = icon("chevron-down"),
-                                        class = "btn-link", style = 'text-decoration: none;
-                  padding: 0;
-                  margin: 0;
-                  color: black;
-                  font-weight: bold;
-                  font-size: 1em;
-                  white-space: normal;
-                  width: 100%;
-                  text-align: left;'),
-                           HTML('<br><br>'),
-                           hidden(numericInput("network_genediff_cutoff", "Gene Diff Cutoff", 0.25, min = 0, max = 1, step = 0.05)),
-                           HTML("<br>"),
-                           HTML("<hr>"),
-                           h3("Submit"),
-                           actionButton("submit_cytokine_network", "Analyze Cytokine Network", class = "btn-block"),
-                           HTML('<hr>'), 
-                           p("It takes ~10min per cell type. Simply leave the browser on and come back later to see the results.")
                   )
-                  
+                  # , 
+                  # tabPanel("Network", value = "C",
+                  #          h3(),
+                  #          HTML('<br>'),     
+                  #          
+                  #          # tags$script(HTML(jscode_upload_txt)),
+                  #          div(style=
+                  #                'padding: 0;
+                  #       margin: 0;
+                  #       color: black;
+                  #       font-weight: bold;
+                  #       font-size: 1em;
+                  #       white-space: normal;
+                  #       width: 100%;
+                  #       text-align: left;
+                  #       margin-bottom: 5px;',
+                  #              HTML('Upload Gene Matrix Files for at least 2 cell types for the Cytokine Network Analysis')
+                  #          ),
+                  #          HTML('<br>'),
+                  #          HTML('<hr>'),
+                  #          h4("B cell"),
+                  #          fileInput("network_matrix_file_B_cell", label = NULL,
+                  #                    multiple = FALSE,
+                  #                    accept = c(".txt", ".xlsx", ".xls")),
+                  #          materialSwitch(
+                  #            inputId = "sample_network_matrix_B_cell",
+                  #            label = "Use Example File", 
+                  #            status = "primary",inline = TRUE,
+                  #            right = TRUE
+                  #          ),
+                  #          
+                  #          div(style='overflow-x: auto;',
+                  #              downloadButton("download_network_matrix", "Download Example File", class = "btn-link")),
+                  #          HTML('<br>'),
+                  #          HTML('<hr>'),
+                  #          
+                  #          HTML('<br>'), 
+                  #          h4("CD4+ T cell"),
+                  #          fileInput("network_matrix_file_T_cell_CD4", label = NULL,
+                  #                    multiple = FALSE,
+                  #                    accept = c(".txt", ".xlsx", ".xls")),
+                  #          materialSwitch(
+                  #            inputId = "sample_network_matrix_T_cell_CD4",
+                  #            label = "Use Example File", 
+                  #            status = "primary",inline = TRUE,
+                  #            right = TRUE
+                  #          ),
+                  #          HTML('<br>'),
+                  #          HTML('<hr>'), 
+                  #          
+                  #          HTML('<br>'), 
+                  #          h4("CD8+ T cell"),
+                  #          fileInput("network_matrix_file_T_cell_CD8", label = NULL,
+                  #                    multiple = FALSE,
+                  #                    accept = c(".txt", ".xlsx", ".xls")),
+                  #          materialSwitch(
+                  #            inputId = "sample_network_matrix_T_cell_CD8",
+                  #            label = "Use Example File", 
+                  #            status = "primary",inline = TRUE,
+                  #            right = TRUE
+                  #          ),
+                  #          HTML('<br>'),                          
+                  #          HTML('<hr>'), 
+                  #          
+                  #          HTML('<br>'), 
+                  #          h4("γδ T cell"),
+                  #          fileInput("network_matrix_file_T_cell_gd", label = NULL,
+                  #                    multiple = FALSE,
+                  #                    accept = c(".txt", ".xlsx", ".xls")),
+                  #          materialSwitch(
+                  #            inputId = "sample_network_matrix_T_cell_gd",
+                  #            label = "Use Example File", 
+                  #            status = "primary",inline = TRUE,
+                  #            right = TRUE
+                  #          ),
+                  #          HTML('<br>'),          
+                  #          HTML('<hr>'), 
+                  #          
+                  #          HTML('<br>'), 
+                  #          h4("Treg"),
+                  #          fileInput("network_matrix_file_Treg", label = NULL,
+                  #                    multiple = FALSE,
+                  #                    accept = c(".txt", ".xlsx", ".xls")),
+                  #          materialSwitch(
+                  #            inputId = "sample_network_matrix_Treg",
+                  #            label = "Use Example File", 
+                  #            status = "primary",inline = TRUE,
+                  #            right = TRUE
+                  #          ),
+                  #          HTML('<br>'),     
+                  #          HTML('<hr>'), 
+                  #          
+                  #          HTML('<br>'), 
+                  #          h4("NK cell"),
+                  #          fileInput("network_matrix_file_NK_cell", label = NULL,
+                  #                    multiple = FALSE,
+                  #                    accept = c(".txt", ".xlsx", ".xls")),
+                  #          materialSwitch(
+                  #            inputId = "sample_network_matrix_NK_cell",
+                  #            label = "Use Example File", 
+                  #            status = "primary",inline = TRUE,
+                  #            right = TRUE
+                  #          ),
+                  #          HTML('<br>'),     
+                  #          HTML('<hr>'), 
+                  #          
+                  #          HTML('<br>'), 
+                  #          h4("pDC"),
+                  #          fileInput("network_matrix_file_pDC", label = NULL,
+                  #                    multiple = FALSE,
+                  #                    accept = c(".txt", ".xlsx", ".xls")),
+                  #          materialSwitch(
+                  #            inputId = "sample_network_matrix_pDC",
+                  #            label = "Use Example File", 
+                  #            status = "primary",inline = TRUE,
+                  #            right = TRUE
+                  #          ),
+                  #          HTML('<br>'),   
+                  #          HTML('<hr>'), 
+                  #          
+                  #          HTML('<br>'), 
+                  #          h4("cDC1"),
+                  #          fileInput("network_matrix_file_cDC1", label = NULL,
+                  #                    multiple = FALSE,
+                  #                    accept = c(".txt", ".xlsx", ".xls")),
+                  #          materialSwitch(
+                  #            inputId = "sample_network_matrix_cDC1",
+                  #            label = "Use Example File", 
+                  #            status = "primary",inline = TRUE,
+                  #            right = TRUE
+                  #          ),
+                  #          HTML('<br>'),   
+                  #          HTML('<hr>'), 
+                  #          
+                  #          HTML('<br>'), 
+                  #          h4("cDC2"),
+                  #          fileInput("network_matrix_file_cDC2", label = NULL,
+                  #                    multiple = FALSE,
+                  #                    accept = c(".txt", ".xlsx", ".xls")),
+                  #          materialSwitch(
+                  #            inputId = "sample_network_matrix_cDC2",
+                  #            label = "Use Example File", 
+                  #            status = "primary",inline = TRUE,
+                  #            right = TRUE
+                  #          ),
+                  #          HTML('<br>'),   
+                  #          HTML('<hr>'), 
+                  #          
+                  #          HTML('<br>'), 
+                  #          h4("MigDC"),
+                  #          fileInput("network_matrix_file_MigDC", label = NULL,
+                  #                    multiple = FALSE,
+                  #                    accept = c(".txt", ".xlsx", ".xls")),
+                  #          materialSwitch(
+                  #            inputId = "sample_network_matrix_MigDC",
+                  #            label = "Use Example File", 
+                  #            status = "primary",inline = TRUE,
+                  #            right = TRUE
+                  #          ),
+                  #          HTML('<br>'), 
+                  #          HTML('<hr>'), 
+                  #          
+                  #          HTML('<br>'), 
+                  #          h4("Langerhans"),
+                  #          fileInput("network_matrix_file_Langerhans", label = NULL,
+                  #                    multiple = FALSE,
+                  #                    accept = c(".txt", ".xlsx", ".xls")),
+                  #          materialSwitch(
+                  #            inputId = "sample_network_matrix_Langerhans",
+                  #            label = "Use Example File", 
+                  #            status = "primary",inline = TRUE,
+                  #            right = TRUE
+                  #          ),
+                  #          HTML('<br>'), 
+                  #          HTML('<hr>'), 
+                  #          
+                  #          HTML('<br>'), 
+                  #          h4("Macrophage"),
+                  #          fileInput("network_matrix_file_Macrophage", label = NULL,
+                  #                    multiple = FALSE,
+                  #                    accept = c(".txt", ".xlsx", ".xls")),
+                  #          materialSwitch(
+                  #            inputId = "sample_network_matrix_Macrophage",
+                  #            label = "Use Example File", 
+                  #            status = "primary",inline = TRUE,
+                  #            right = TRUE
+                  #          ),
+                  #          HTML('<br>'), 
+                  #          HTML('<hr>'), 
+                  #          
+                  #          HTML('<br>'), 
+                  #          h4("Monocyte"),
+                  #          fileInput("network_matrix_file_Monocyte", label = NULL,
+                  #                    multiple = FALSE,
+                  #                    accept = c(".txt", ".xlsx", ".xls")),
+                  #          materialSwitch(
+                  #            inputId = "sample_network_matrix_Monocyte",
+                  #            label = "Use Example File", 
+                  #            status = "primary",inline = TRUE,
+                  #            right = TRUE
+                  #          ),
+                  #          HTML('<br>'), 
+                  #          HTML('<hr>'), 
+                  #          
+                  #          HTML('<br>'), 
+                  #          h4("Neutrophil"),
+                  #          fileInput("network_matrix_file_Neutrophil", label = NULL,
+                  #                    multiple = FALSE,
+                  #                    accept = c(".txt", ".xlsx", ".xls")),
+                  #          materialSwitch(
+                  #            inputId = "sample_network_matrix_Neutrophil",
+                  #            label = "Use Example File", 
+                  #            status = "primary",inline = TRUE,
+                  #            right = TRUE
+                  #          ),
+                  #          HTML('<br>'), 
+                  # 
+                  #          
+                  #          h3(),
+                  #          HTML('<hr>'),
+                  #          actionButton("dropdown_btn3", label = ' Optional Parameters', icon = icon("chevron-down"),
+                  #                       class = "btn-link", style = 'text-decoration: none;
+                  # padding: 0;
+                  # margin: 0;
+                  # color: black;
+                  # font-weight: bold;
+                  # font-size: 1em;
+                  # white-space: normal;
+                  # width: 100%;
+                  # text-align: left;'),
+                  #          HTML('<br><br>'),
+                  #          hidden(numericInput("network_genediff_cutoff", "Gene Diff Cutoff", 0.25, min = 0, max = 1, step = 0.05)),
+                  #          HTML("<br>"),
+                  #          HTML("<hr>"),
+                  #          h3("Submit"),
+                  #          actionButton("submit_cytokine_network", "Analyze Cytokine Network", class = "btn-block"),
+                  #          HTML('<hr>'), 
+                  #          p("It takes ~10min per cell type. Simply leave the browser on and come back later to see the results.")
+                  # )
+                  # 
                   
       ),
       width = 4
@@ -413,14 +414,16 @@ output$pageStub <- renderUI(fluidPage(
       # tab A
       plotOutput('plot', height = '500px'),
       uiOutput("download"),
-      dataTableOutput("table"),
+      # dataTableOutput("table"),
+      DT::DTOutput("table"),
       uiOutput("download_table"),
       
       # tab B
       uiOutput('radio_btns_B'),
       plotOutput('plot_B', height = '500px'),
       uiOutput("download_B"),
-      dataTableOutput('table_B'),
+      # dataTableOutput('table_B'),
+      DT::DTOutput('table_B'),
       uiOutput("download_table_B")
       #downloadButton('downloadTable_B_all', "Download all samples")
     ))))
@@ -491,3 +494,4 @@ split_input <- function(input_list){
   split_vec <- strsplit(input_list, "\\s*,\\s*|\\s+")
   return (split_vec[[1]])
 }
+

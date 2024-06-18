@@ -84,8 +84,12 @@ genesB <- observeEvent(input$submit_compass_matrix, {
                                                           genediff_cutoff = input$genediff_cutoff, 
                                                           species = "mouse")
           cat("Got data table\n")
-          #df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
+          df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
           data$irea_plot_B <- IreaCompassPlot(data$table_tabB, color_by = "pval")
+          
+          # OR
+          # data$irea_plot_B <- IreaCompassPlot(data$table_tabB, color_by = "pval")
+          
           cat("Plot IREA\n")
         },
         error = function(e){
@@ -185,7 +189,7 @@ output$table_B <- renderDataTable({
   # if table data has been calculated, display table
   req(data$table_tabB)
   data$table_tabB
-  
+
   # TODO: in the future, can select one of the samples
   #data$table_tabB_subset <- subset(data$table_tabB, Sample == input$rb)
   #data$table_tabB_subset
@@ -293,3 +297,4 @@ output$downloadTable_B <- downloadHandler(
     write.csv(data$table_tabB, fname)
   }
 )
+

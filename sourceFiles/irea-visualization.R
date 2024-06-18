@@ -36,7 +36,9 @@ IreaCompassPlot = function(df_irea, color_by = c("pval", "ES"), plot_receptor = 
   text_angle = c(seq(0,-180,length.out = 43), seq(360, 180, length.out = 43))
   
   # Order cytokines to be displayed by enrichment score
-  df_irea$Cytokine = factor(df_irea$Cytokine, levels = df_irea$Cytokine[order(df_irea$NES)])
+  unique_cytokines <- unique(df_irea$Cytokine)
+  df_irea$Cytokine = factor(unique_cytokines, levels = unique_cytokines[order(df_irea$NES)])
+  # df_irea$Cytokine = factor(df_irea$Cytokine, levels = df_irea$Cytokine[order(df_irea$NES)])
   
   
   # Annotation data frame, which is used to add text (cytokine names) with a specific angle
@@ -142,17 +144,26 @@ IreaRadarPlot = function(df_irea,
   if (fill_color == "default") {
     fill_color = celltype_spreadsheet[celltype_spreadsheet$Celltype_OriginalName == input_celltype, "Celltype_Color"][1]
   }
-
+  
   # Process the axes to be plotted
   axes_name = unique(irea_polarization_states_cc$Polarization)
-  rownames(df_irea) = df_irea[, analysis_type]
-  axes_enrichment = df_irea[axes_name, "ES"]
+  
+  #rownames(df_irea) = df_irea[[analysis_type]]
+  
+  # OR #
+  
+  df_irea$UniqueRowName <- paste0(df_irea[, analysis_type], seq_along(df_irea[, analysis_type]))
+  rownames(df_irea) <- df_irea$UniqueRowName
+  
+  #axes_enrichment = df_irea[axes_name, "ES"]
+  axes_enrichment = df_irea[df_irea$UniqueRowName, "ES"]
   axes_enrichment[is.na(axes_enrichment)] = 0 # The states not found have an enrichment score of 0
-  #axes_enrichment[axes_enrichment<0] = 0 # Do not plot negative values
+  axes_enrichment[axes_enrichment<0] = 0 # Do not plot negative values
+  
   # Rescale the axis from 0.2 to 1 for visualization purposes
   axes_enrichment = (axes_enrichment - min(axes_enrichment))/ (max(axes_enrichment) - min(axes_enrichment)) + 0.3 # 0.3 is 0 on the plot
   # TODO: right now the maximum is 1, but the maximum should be whatever is in the data
-
+  
   # If no polarization state is significant, show an enrichment score of 0 for every state
   if (min(df_irea$padj) > 0.05) {
     axes_enrichment = rep(0.3, length(axes_enrichment)) # 0.3 is 0 on the plot
@@ -179,7 +190,7 @@ IreaRadarPlot = function(df_irea,
                        state_text = c(celltype_display, axes_name))
   # Move text labels on the left and right size a little bit further from the plot
   #df_text$xx[df_text$yy < 1.6 & df_text$yy > - 1.6] = df_text$xx[df_text$yy < 1.6 & df_text$yy > - 1.6]*1.1
-
+  
   df_polygon = data.frame(xx = axes_enrichment * cos(c_degrees),
                           yy = axes_enrichment * sin(c_degrees))
   
@@ -199,7 +210,6 @@ IreaRadarPlot = function(df_irea,
   return (p1)
   
 }
-
 
 
 
@@ -386,7 +396,7 @@ IreaTopGenes = function(input_profile,
                                     from = cytokine_spreadsheet$Cytokine_OriginalName,
                                     to = cytokine_spreadsheet$Cytokine_DisplayName, warn_missing = FALSE)
   
-  profiles_cc = as.matrix(lig_seurat_sub@assays[['RNA']][,])
+  profiles_cc = as.matrix(lig_seurat_sub@assays[['RNA']]@data)
   
   # TODO: is there a better way to translate gene names from mouse to human?
   if (species == "human") {
