@@ -36,9 +36,9 @@ IreaCompassPlot = function(df_irea, color_by = c("pval", "ES"), plot_receptor = 
   text_angle = c(seq(0,-180,length.out = 43), seq(360, 180, length.out = 43))
   
   # Order cytokines to be displayed by enrichment score
-  unique_cytokines <- unique(df_irea$Cytokine)
-  df_irea$Cytokine = factor(unique_cytokines, levels = unique_cytokines[order(df_irea$NES)])
-  # df_irea$Cytokine = factor(df_irea$Cytokine, levels = df_irea$Cytokine[order(df_irea$NES)])
+  #unique_cytokines <- unique(df_irea$Cytokine)
+  #df_irea$Cytokine = factor(unique_cytokines, levels = unique_cytokines[order(df_irea$NES)])
+  df_irea$Cytokine = factor(df_irea$Cytokine, levels = unique(df_irea$Cytokine[order(df_irea$NES)]))
   
   
   # Annotation data frame, which is used to add text (cytokine names) with a specific angle
