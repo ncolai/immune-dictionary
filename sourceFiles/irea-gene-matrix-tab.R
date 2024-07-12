@@ -62,7 +62,7 @@ genesB <- observeEvent(input$submit_compass_matrix, {
     }
     else{
       # check if genes are valid
-      is_valid <- valid_genes(rownames(data$input_profile), species = tolower(input$speciesInput))
+      is_valid <- valid_genes(rownames(data$input_profile))#, species = tolower(input$speciesInput))
       
       if (is_valid == 'invalid'){
         showNotification('Please submit valid genes in the first column.', duration = NULL, type = 'error')
@@ -141,7 +141,7 @@ genesB <- observeEvent(input$submit_radar_matrix, {
     }
     else{
       # check if genes are valid
-      is_valid <- valid_genes(rownames(data$input_profile), species = tolower(input$speciesInput))
+      is_valid <- valid_genes(rownames(data$input_profile))#, species = tolower(input$speciesInput))
       
       if (is_valid == 'invalid'){
         showNotification('Please submit valid genes in the first column.', duration = NULL, type = 'error')

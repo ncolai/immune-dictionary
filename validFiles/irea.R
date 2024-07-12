@@ -445,7 +445,7 @@ observeEvent(input$clear,{
 data <- reactiveValues(table = NULL, irea_plot = NULL, table_tabB = NULL, irea_plot_B = NULL, input_profile = NULL, table_tabB_subset = NULL)
 
 "%ni%" <- Negate("%in%")
-valid_genes <- function(gene_list, species) {
+valid_genes <- function(gene_list, species='mouse') {
   # check if list of genes is valid (in lig_seurat)
   not_working_genes <- vector()
   final_genes_list <- vector()
