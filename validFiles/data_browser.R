@@ -24,12 +24,6 @@ source('sourceFiles/data_browser_violin_plot.R', local = TRUE)
 source('sourceFiles/data_browser_box_plot.R', local = TRUE)
 source('sourceFiles/data_browser_umap.R', local = TRUE)
 
-if (!exists('example_plots')){
-  cat('Loading data\n')
-  example_plots <- readRDS("dataFiles/example_plots.rds")
-  cat('Loaded data')
-}
-
 css <- "
 .shiny-notification {
           position:fixed;

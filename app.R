@@ -7,6 +7,7 @@ library(googlesheets4)
 library(fst)
 library(qs)
 library(Seurat)
+#library(shinycssloaders)
 
 # put a message in console or server log; note this happens only when the app is started!
 cat("uiStub application started...\n")
@@ -23,6 +24,12 @@ ui <- fluidPage(
   uiOutput("uiStub")                               # single-output stub ui
 )
 
+if (!exists('example_plots')){
+  cat('Loading data\n')
+  example_plots <- qread("dataFiles/example_plots.qs")
+  cat('Loaded data')
+}
+
 server <- function(input, output, session) {
   cat("Session started.\n")                               # this prints when a session starts
   onSessionEnded(function() {cat("Session ended.\n\n")})  # this prints when a session ends
@@ -36,7 +43,8 @@ server <- function(input, output, session) {
         # fluidRow(
         #   column(12, includeHTML("htmlFiles/mainPage.html"))
         # ),
-        uiOutput("pageStub")                  # loaded server code should render the
+        uiOutput("pageStub")
+        #uiOutput("pageStub")                  # loaded server code should render the
       )                                           #    rest of the page to this output$
     )
   })
