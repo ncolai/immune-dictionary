@@ -7,7 +7,6 @@ library(googlesheets4)
 library(fst)
 library(qs)
 library(Seurat)
-#library(shinycssloaders)
 
 # put a message in console or server log; note this happens only when the app is started!
 cat("uiStub application started...\n")
@@ -43,11 +42,25 @@ server <- function(input, output, session) {
         # fluidRow(
         #   column(12, includeHTML("htmlFiles/mainPage.html"))
         # ),
-        uiOutput("pageStub")
+        #div(
+          #id = "loading_page",
+          #h1("loading...")
+        #),
+        div(
+          id = "main_content",
+          uiOutput("pageStub")
+        )
         #uiOutput("pageStub")                  # loaded server code should render the
       )                                           #    rest of the page to this output$
     )
   })
+  output$pageStub <- renderUI(tagList(              # 404 if no file with that name
+    fluidRow(
+      column(5,
+             HTML("<h2>Loading...</h2>")
+      )
+    )
+  ))
   
   # load server code for page specified in URL
   validFiles = c("home.R",
@@ -60,7 +73,6 @@ server <- function(input, output, session) {
   fname = isolate(session$clientData$url_search)       # isolate() deals with reactive context
   if(nchar(fname)==0) { fname = "?home" }              # blank means home page
   fname = paste0(substr(fname, 2, nchar(fname)), ".R") # remove leading "?", add ".R"
-  
   
   if(!fname %in% validFiles){                          # is that one of our files?
     output$pageStub <- renderUI(tagList(              # 404 if no file with that name

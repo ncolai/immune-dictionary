@@ -97,7 +97,7 @@ submit_btn_celltype2 <- observeEvent(input$violinSubmit,{
     if (exists(var_name)) {
       ft2 <- get(var_name)
     } else if (is.null(lig_seurat[[input$cellType2]])) {
-      ft2 <- fst(paste0("dataFiles/celltype_fst_additionalcompress/200417-ligands-alldata-seurat-p3-",
+      ft2 <- fst(paste0("dataFiles/celltype_fst/200417-ligands-alldata-seurat-p3-",
                         input$cellType2, ".rds.fst", sep = ''))
     }
     plot_df = ft2[c(input$violinInputGene, 'celltype', 'sample', 'rep')]
