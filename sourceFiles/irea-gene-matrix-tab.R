@@ -62,7 +62,8 @@ genesB <- observeEvent(input$submit_compass_matrix, {
     }
     else{
       # check if genes are valid
-      is_valid <- valid_genes(rownames(data$input_profile))#, species = tolower(input$speciesInput))
+      # Parameter removed: ", species = tolower(input$speciesInput)"
+      is_valid <- valid_genes(rownames(data$input_profile))
       
       if (is_valid == 'invalid'){
         showNotification('Please submit valid genes in the first column.', duration = NULL, type = 'error')
@@ -84,8 +85,8 @@ genesB <- observeEvent(input$submit_compass_matrix, {
                                                           genediff_cutoff = input$genediff_cutoff, 
                                                           species = "mouse")
           cat("Got data table\n")
-          df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
-          data$irea_plot_B <- IreaCompassPlot(data$table_tabB, color_by = "pval")
+          # df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
+          data$irea_plot_type <- "Compass"
           
           # OR
           # data$irea_plot_B <- IreaCompassPlot(data$table_tabB, color_by = "pval")
@@ -94,6 +95,7 @@ genesB <- observeEvent(input$submit_compass_matrix, {
         },
         error = function(e){
           showNotification('Error in calculation. Please try again with a different cell type.', duration = NULL, type = 'error')
+          print(e)
           data$input_profile = NULL
           data$table_tabB = NULL
           data$irea_plot_B = NULL
@@ -141,7 +143,8 @@ genesB <- observeEvent(input$submit_radar_matrix, {
     }
     else{
       # check if genes are valid
-      is_valid <- valid_genes(rownames(data$input_profile))#, species = tolower(input$speciesInput))
+      # Removed parameter: ", species = tolower(input$speciesInput)"
+      is_valid <- valid_genes(rownames(data$input_profile))
       
       if (is_valid == 'invalid'){
         showNotification('Please submit valid genes in the first column.', duration = NULL, type = 'error')
@@ -163,7 +166,7 @@ genesB <- observeEvent(input$submit_radar_matrix, {
                                                     genediff_cutoff = input$genediff_cutoff, 
                                                     species = "mouse")
           #df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
-          data$irea_plot_B <- IreaRadarPlot(data$table_tabB, input_celltype = input$inputCell_tabB)
+          data$irea_plot_type <- "Radar"
         },
         error = function(e){
           showNotification('Error in calculation. Please try again with a different cell type.', duration = NULL, type = 'error')
@@ -187,17 +190,33 @@ genesB <- observeEvent(input$submit_radar_matrix, {
 
 output$table_B <- renderDataTable({
   # if table data has been calculated, display table
-  req(data$table_tabB)
-  data$table_tabB
+  # req(data$table_tabB)
+  # data$table_tabB
 
   # TODO: in the future, can select one of the samples
-  #data$table_tabB_subset <- subset(data$table_tabB, Sample == input$rb)
-  #data$table_tabB_subset
+  req(data$table_tabB)
+  data$table_tabB_subset <- subset(data$table_tabB, Sample == input$rb)
+  data$table_tabB_subset
 })
 
 plotInput_B <- function(){
   # if table data has been calculated, display plot
-  req(data$irea_plot_B)
+  # req(data$irea_plot_B)
+  # data$irea_plot_B
+  
+  req(data$table_tabB)
+  
+  if (!is.null(input$rb)){
+    df_irea_pd1 = subset(data$table_tabB, Sample == input$rb)
+    
+    if (data$irea_plot_type == "Radar") {
+      data$irea_plot_B <- IreaRadarPlot(df_irea_pd1, input_celltype = input$inputCell_tabB)
+    }
+    else if (data$irea_plot_type == "Compass") {
+      data$irea_plot_B <- IreaCompassPlot(df_irea_pd1, color_by = "pval")
+    }
+  }
+  
   data$irea_plot_B
 }
 
@@ -205,10 +224,10 @@ output$plot_B <- renderPlot({
   plotInput_B()
 }, height = 500)
 
-# output$radio_btns_B <- renderUI({
-#   req(data$input_profile)
-#   radioButtons("rb", "Choose one:", choices = colnames(data$input_profile))   # default choice is first option
-# })
+output$radio_btns_B <- renderUI({
+  req(data$input_profile)
+  radioButtons("rb", "Choose one:", choices = colnames(data$input_profile))   # default choice is first option
+})
 
 output$download_matrix <- downloadHandler(
   # download example gene_matrix file
@@ -297,4 +316,3 @@ output$downloadTable_B <- downloadHandler(
     write.csv(data$table_tabB, fname)
   }
 )
-

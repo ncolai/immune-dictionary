@@ -442,10 +442,17 @@ observeEvent(input$clear,{
   return("")
 })
 
-data <- reactiveValues(table = NULL, irea_plot = NULL, table_tabB = NULL, irea_plot_B = NULL, input_profile = NULL, table_tabB_subset = NULL)
+data <- reactiveValues(
+  table = NULL, 
+  irea_plot = NULL, 
+  table_tabB = NULL, 
+  irea_plot_B = NULL, 
+  input_profile = NULL, 
+  table_tabB_subset = NULL,
+  irea_plot_type = NULL)
 
 "%ni%" <- Negate("%in%")
-valid_genes <- function(gene_list, species='mouse') {
+valid_genes <- function(gene_list, species = "mouse") {
   # check if list of genes is valid (in lig_seurat)
   not_working_genes <- vector()
   final_genes_list <- vector()
@@ -494,4 +501,3 @@ split_input <- function(input_list){
   split_vec <- strsplit(input_list, "\\s*,\\s*|\\s+")
   return (split_vec[[1]])
 }
-

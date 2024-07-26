@@ -34,7 +34,7 @@ genes <- observeEvent(input$submit_compass_list,{
   hide("download_B")
   hide("table_B")
   hide("download_table_B")
-  #hide("radio_btns_B")
+  hide("radio_btns_B")
   
   if (input$inputGene != '' & input$inputCell != ' '){
     split_genes_vector <- split_input(input$inputGene)
