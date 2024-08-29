@@ -4,6 +4,7 @@ observeEvent(input$submit_compass_list, {
   hide("download")
   hide("table")
   hide("download_table")
+  hide("plot_C")
 }, priority = 1, ignoreInit = TRUE)
 
 observeEvent(input$submit_radar_list, {
@@ -12,6 +13,7 @@ observeEvent(input$submit_radar_list, {
   hide("download")
   hide("table")
   hide("download_table")
+  hide("plot_C")
 }, priority = 1, ignoreInit = TRUE)
 
 observeEvent(input$dropdown_btn,{

@@ -289,6 +289,7 @@ IreaNetworkCircosAll = function(df_irea_network) {
   
   par(mfrow = c(1, 1)) # Put plotting arrangement back to original state
   
+  return(recordPlot())
 }
 
 
@@ -307,7 +308,8 @@ IreaNetworkCircosIndividual = function(df_irea_network, n_cols = 5, cytokines_to
   }
   
   # Prepare data for circos plot
-  cytokine_spreadsheet = read.xlsx("~/Dropbox/Hacohen/ligands/spreadsheets/cytokine_list.xlsx")
+  #cytokine_spreadsheet = read.xlsx("~/Dropbox/Hacohen/ligands/spreadsheets/cytokine_list.xlsx")
+  cytokine_spreadsheet = read.xlsx("dataFiles/cytokine_list.xlsx")
   
   unique_cytokines = unique(df_irea_network$Cytokine)
   unique_cytokines = factor(unique_cytokines, levels = setdiff(cytokine_spreadsheet$Cytokine_DisplayName, "Combo"))
@@ -323,7 +325,7 @@ IreaNetworkCircosIndividual = function(df_irea_network, n_cols = 5, cytokines_to
   # names(cytokine_colors) = unique_cytokines
   
   # Load the cell type color list
-  celltype_spreadsheet = read.xlsx("~/Dropbox/Hacohen/ligands/spreadsheets/celltype_list.xlsx")
+  celltype_spreadsheet = read.xlsx("dataFiles/celltype_list.xlsx")
   # Arrange cell types to be plotted around the circle based on pre-defined list
   unique_celltypes = unique_celltypes_unordered[na.omit(order(match(unique_celltypes_unordered, celltype_spreadsheet$Celltype_DisplayName)))]
   
@@ -354,6 +356,8 @@ IreaNetworkCircosIndividual = function(df_irea_network, n_cols = 5, cytokines_to
   }
   
   par(mfrow = c(1, 1)) # Put plotting arrangement back to original state
+  
+  return(recordPlot())
 }
 
 

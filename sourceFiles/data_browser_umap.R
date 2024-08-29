@@ -24,7 +24,7 @@ observeEvent(input$umap_submit, {
       #lig_seurat[[input_celltype]] <- readRDS(file_name)
       file_name <- paste0("dataFiles/celltypeSmallUmap/",input$umap_featureInput1,".qs")
       lig_seurat[[input_celltype]] <- qread(file_name)
-      Idents(lig_seurat[[input_celltype]]) <- "cluster" #fix docker img issue
+      #Idents(lig_seurat[[input_celltype]]) <- "cluster" #fix docker img issue
       #print('data is loaded!!!')
     }
     

@@ -7,6 +7,7 @@ library(googlesheets4)
 library(fst)
 library(qs)
 library(Seurat)
+library(openxlsx)
 
 # put a message in console or server log; note this happens only when the app is started!
 cat("uiStub application started...\n")

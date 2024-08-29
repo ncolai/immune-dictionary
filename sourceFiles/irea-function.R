@@ -523,7 +523,9 @@ GetEnrichmentScoreProjection = function(input_profile, input_celltype, genediff_
   print("es2")
   # Perform multiple hypothesis testing correction
   df_irea$padj = p.adjust(df_irea$pval, method = "fdr")
-  df_irea$Celltype = "B_cell"
+  #Why is this line frozen?
+  df_irea$Celltype = input_celltype
+  #df_irea$Celltype = "B_cell"
   print("es3")
   # Fill missing data with "not-enriched"
   df_irea$padj[is.na(df_irea$padj)] = 1
