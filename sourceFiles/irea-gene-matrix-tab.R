@@ -9,19 +9,21 @@ make_matrix <- function(df,rownames = NULL){
 observeEvent(input$submit_compass_matrix, {
   # hide results during calculation
   runjs("$('.busy').show();")
-  hide("plot_B")
-  hide("download_B")
-  hide("table_B")
-  hide("download_table_B")
+  hideElement("plot_B")
+  hideElement("download_B")
+  hideElement("table_B")
+  hideElement("download_table_B")
+  hideElement("radio_btns_B")
 }, priority = 1, ignoreInit = TRUE)
 
 observeEvent(input$submit_radar_matrix, {
   # hide results during calculation
   runjs("$('.busy').show();")
-  hide("plot_B")
-  hide("download_B")
-  hide("table_B")
-  hide("download_table_B")
+  hideElement("plot_B")
+  hideElement("download_B")
+  hideElement("table_B")
+  hideElement("download_table_B")
+  hideElement("radio_btns_B")
 }, priority = 1, ignoreInit = TRUE)
 
 
@@ -35,10 +37,16 @@ observeEvent(input$dropdown_btn2,{
 genesB <- observeEvent(input$submit_compass_matrix, {
   `%notin%` = Negate(`%in%`)
   # hide tab A results
-  hide("plot")
-  hide("download")
-  hide("table")
-  hide("download_table")
+  hideElement("plot")
+  hideElement("download")
+  hideElement("table")
+  hideElement("download_table")
+  
+  #hide tab C results
+  hideElement("plot_C")
+  hideElement("download_C")
+  hideElement("table_C")
+  hideElement("download_table_C")
   
   if ((!is.null(input$matrix_file) | input$sample_matrix) & input$inputCell_tabB != ' '){
     if (input$sample_matrix){
@@ -107,19 +115,26 @@ genesB <- observeEvent(input$submit_compass_matrix, {
     showNotification('Please upload gene matrix file and select a cell type.', type = 'error')
   }
   runjs("$('.busy').hide();")
-  show("plot_B")
-  show("download_B")
-  show("table_B")
-  show("download_table_B")
+  showElement("plot_B")
+  showElement("download_B")
+  showElement("table_B")
+  showElement("download_table_B")
+  showElement("radio_btns_B")
 }, ignoreInit = TRUE)
 
 genesB <- observeEvent(input$submit_radar_matrix, {
   `%notin%` = Negate(`%in%`)
   # hide tab A results
-  hide("plot")
-  hide("download")
-  hide("table")
-  hide("download_table")
+  hideElement("plot")
+  hideElement("download")
+  hideElement("table")
+  hideElement("download_table")
+  
+  #hide tab C results
+  hideElement("plot_C")
+  hideElement("download_C")
+  hideElement("table_C")
+  hideElement("download_table_C")
   
   if ((!is.null(input$matrix_file) | input$sample_matrix) & input$inputCell_tabB != ' '){
     if (input$sample_matrix){
@@ -182,10 +197,11 @@ genesB <- observeEvent(input$submit_radar_matrix, {
     showNotification('Please upload gene matrix file and select a cell type.', type = 'error')
   }
   runjs("$('.busy').hide();")
-  show("plot_B")
-  show("download_B")
-  show("table_B")
-  show("download_table_B")
+  showElement("plot_B")
+  showElement("download_B")
+  showElement("table_B")
+  showElement("download_table_B")
+  showElement("radio_btns_B")
 }, ignoreInit = TRUE)
 
 output$table_B <- renderDataTable({
@@ -245,10 +261,10 @@ output$download_matrix <- downloadHandler(
 observeEvent(input$sample_matrix, {
   # session$sendCustomMessage("upload_txt", "SOME OTHER TEXT")
   if (input$sample_matrix == TRUE){
-    hide('matrix_file')
+    hideElement('matrix_file')
   }
   else{
-    show('matrix_file')
+    showElement('matrix_file')
   }
 })
 

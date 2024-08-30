@@ -355,6 +355,7 @@ data <- reactiveValues(
   input_profile = NULL, 
   table_tabB_subset = NULL,
   irea_plot_type = NULL,
+  input_profile_C = NULL, 
   table_tabC = NULL, 
   irea_plot_C = NULL,
   irea_plot_C_type = NULL)

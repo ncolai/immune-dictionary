@@ -7,11 +7,11 @@ make_matrix <- function(df,rownames = NULL){
 }
 
 observeEvent(input$submit_cytokine_network, {
-  print('this is a test')
-  hide("plot")
-  hide("download")
-  hide("table")
-  hide("download_table")
+  runjs("$('.busy').show();")
+  hideElement("plot_C")
+  hideElement("download_C")
+  hideElement("table_C")
+  hideElement("download_table_C")
   #toggle('network_genediff_cutoff')
 }, priority = 1, ignoreInit = TRUE)
 
@@ -23,17 +23,17 @@ observeEvent(input$dropdown_btn3,{
 genesC <- observeEvent(input$submit_cytokine_network, {
   `%notin%` = Negate(`%in%`)
   # hide tab A results
-  hide("plot")
-  hide("download")
-  hide("table")
-  hide("download_table")
+  hideElement("plot")
+  hideElement("download")
+  hideElement("table")
+  hideElement("download_table")
   
   # hide tab B results
-  hide("plot_B")
-  hide("download_B")
-  hide("table_B")
-  hide("download_table_B")
-  hide("radio_btns_B")
+  hideElement("plot_B")
+  hideElement("download_B")
+  hideElement("table_B")
+  hideElement("download_table_B")
+  hideElement("radio_btns_B")
   
   if ((!is.null(input$network_matrix_singlefile) | input$sample_network_matrix_singlefile)){
     if (input$sample_network_matrix_singlefile){
@@ -46,23 +46,23 @@ genesC <- observeEvent(input$submit_cytokine_network, {
       my_data <- read_excel(table_data, .name_repair = ~ ifelse(nzchar(.x), .x, paste('Sample', seq_along(.x) - 1)))  # rename columns without names
     }
     cat('calculating')
-    data$input_profile <- make_matrix(select(my_data,-1), pull(my_data,1))      # make matrix from input
+    data$input_profile_C <- make_matrix(select(my_data,-1), pull(my_data,1))      # make matrix from input
     
     # check if file format is correct
     # make sure each column has a title and only numbers
-    if (!isTRUE(all(is.numeric(data$input_profile) & -1000000 <= data$input_profile & data$input_profile <= 100000))){
-      data$input_profile <- NULL
+    if (!isTRUE(all(is.numeric(data$input_profile_C) & -1000000 <= data$input_profile_C & data$input_profile_C <= 100000))){
+      data$input_profile_C <- NULL
       showNotification(HTML(paste0('Your data file format is incorrect.', '<br>', 'Please make sure the first column is genes, 
                                    and the following columns only contain numbers (in the range [-1 to 1]) pertaining to the sample.')), duration = NULL, type = 'error')
     }
     else{
       # check if genes are valid
       # Parameter removed: ", species = tolower(input$speciesInput)"
-      is_valid <- valid_genes(rownames(data$input_profile))
+      is_valid <- valid_genes(rownames(data$input_profile_C))
       
       if (identical(is_valid, 'invalid')){
         showNotification('Please submit valid genes in the first column.', duration = NULL, type = 'error')
-        data$input_profile <- NULL
+        data$input_profile_C <- NULL
         data$table_tabC = NULL
         data$irea_plot_C = NULL
       }
@@ -78,7 +78,7 @@ genesC <- observeEvent(input$submit_cytokine_network, {
           
           # To get cell-cell interaction
           library(openxlsx)
-          df_irea_all = IreaAll(data$input_profile, species = "mouse", threshold_receptor = 0.05, threshold_ligand = 0.05)
+          df_irea_all = IreaAll(data$input_profile_C, species = "mouse", threshold_receptor = 0.05, threshold_ligand = 0.05)
           #save(df_irea_all, file = "df_irea_all.RData")
           #load("df_irea_all.RData")
           df_irea_network = IreaNetwork(df_irea_all, require_receptor_expression = TRUE)
@@ -87,7 +87,7 @@ genesC <- observeEvent(input$submit_cytokine_network, {
           data$table_tabC <- df_irea_network_pos
           
           cat("Got data table\n")
-          # df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
+          # df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile_C)[1])
           data$irea_plot_C_type <- "Network"
           
           # OR
@@ -98,7 +98,7 @@ genesC <- observeEvent(input$submit_cytokine_network, {
         error = function(e){
           showNotification('Error in calculation. Please try again with a different cell type.', duration = NULL, type = 'error')
           print(e)
-          data$input_profile = NULL
+          data$input_profile_C = NULL
           data$table_tabC = NULL
           data$irea_plot_C = NULL
         })
@@ -109,10 +109,10 @@ genesC <- observeEvent(input$submit_cytokine_network, {
     showNotification('Please upload gene matrix file', type = 'error')
   }
   runjs("$('.busy').hide();")
-  show("plot_C")
-  show("download_C")
-  show("table_C")
-  show("download_table_C")
+  showElement("plot_C")
+  showElement("download_C")
+  showElement("table_C")
+  showElement("download_table_C")
 }, ignoreInit = TRUE)
 
 output$table_C <- renderDataTable({
@@ -170,10 +170,10 @@ output$download_network_matrix <- downloadHandler(
 observeEvent(input$sample_network_matrix_singlefile, {
   # session$sendCustomMessage("upload_txt", "SOME OTHER TEXT")
   if (input$sample_network_matrix_singlefile == TRUE){
-    hide('network_matrix_singlefile')
+    hideElement('network_matrix_singlefile')
   }
   else{
-    show('network_matrix_singlefile')
+    showElement('network_matrix_singlefile')
   }
 })
 

@@ -1,19 +1,17 @@
 observeEvent(input$submit_compass_list, {
   runjs("$('.busy').show();")
-  hide("plot")
-  hide("download")
-  hide("table")
-  hide("download_table")
-  hide("plot_C")
+  hideElement("plot")
+  hideElement("download")
+  hideElement("table")
+  hideElement("download_table")
 }, priority = 1, ignoreInit = TRUE)
 
 observeEvent(input$submit_radar_list, {
   runjs("$('.busy').show();")
-  hide("plot")
-  hide("download")
-  hide("table")
-  hide("download_table")
-  hide("plot_C")
+  hideElement("plot")
+  hideElement("download")
+  hideElement("table")
+  hideElement("download_table")
 }, priority = 1, ignoreInit = TRUE)
 
 observeEvent(input$dropdown_btn,{
@@ -32,11 +30,17 @@ observeEvent(input$gene_file, {
 
 genes <- observeEvent(input$submit_compass_list,{
   # hide tab B results
-  hide("plot_B")
-  hide("download_B")
-  hide("table_B")
-  hide("download_table_B")
-  hide("radio_btns_B")
+  hideElement("plot_B")
+  hideElement("download_B")
+  hideElement("table_B")
+  hideElement("download_table_B")
+  hideElement("radio_btns_B")
+  
+  #hide tab C results
+  hideElement("plot_C")
+  hideElement("download_C")
+  hideElement("table_C")
+  hideElement("download_table_C")
   
   if (input$inputGene != '' & input$inputCell != ' '){
     split_genes_vector <- split_input(input$inputGene)
@@ -81,22 +85,26 @@ genes <- observeEvent(input$submit_compass_list,{
     showNotification('Please enter in genes and select a cell type.', type = 'error')
   }
   # show end results
-  show("plot")
-  show("download")
-  show("table")
-  show("download_table")
+  showElement("plot")
+  showElement("download")
+  showElement("table")
+  showElement("download_table")
   runjs("$('.busy').hide();")
 }, ignoreInit = TRUE)
 
 genes <- observeEvent(input$submit_radar_list,{
   # hide tab B results
-  hide("plot_B")
-  hide("download_B")
-  hide("table_B")
-  hide("download_table_B")
-  #hide("radio_btns_B")
+  hideElement("plot_B")
+  hideElement("download_B")
+  hideElement("table_B")
+  hideElement("download_table_B")
+  hideElement("radio_btns_B")
   
-  
+  #hide tab C results
+  hideElement("plot_C")
+  hideElement("download_C")
+  hideElement("table_C")
+  hideElement("download_table_C")
   
   if (input$inputGene != '' & input$inputCell != ' '){
     split_genes_vector <- split_input(input$inputGene)
@@ -142,10 +150,10 @@ genes <- observeEvent(input$submit_radar_list,{
     showNotification('Please enter in genes and select a cell type.', type = 'error')
   }
   # show end results
-  show("plot")
-  show("download")
-  show("table")
-  show("download_table")
+  showElement("plot")
+  showElement("download")
+  showElement("table")
+  showElement("download_table")
   runjs("$('.busy').hide();")
 }, ignoreInit = TRUE)
 
