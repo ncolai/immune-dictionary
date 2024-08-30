@@ -4,12 +4,14 @@
 
 IreaAll = function(input_profile, genediff_cutoff = 0.25, species = "mouse",
                    threshold_receptor = 0.05,
-                   threshold_ligand = 0.05) {
+                   threshold_ligand = 0.05, celltypes) {
   input_colnames = colnames(input_profile)
   samples = unique(gsub("__.*$", "", input_colnames))
   sample_reference = "Control"
   samples = setdiff(samples, sample_reference)
-  celltypes = unique(gsub("^.*__", "", input_colnames))
+  if (length(celltypes) == 0) { #by default run all celltypes available
+    celltypes = unique(gsub("^.*__", "", input_colnames))
+  }
 
   #celltype_spreadsheet = read.xlsx("celltype_list.xlsx")
   celltype_spreadsheet = read.xlsx("dataFiles/celltype_list.xlsx")

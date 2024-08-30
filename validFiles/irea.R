@@ -7,6 +7,7 @@ library(shinyjs)
 library(tidyverse)
 source('sourceFiles/irea-function.R')
 source('sourceFiles/irea-visualization.R')
+source('sourceFiles/irea-receptor.R')
 source('sourceFiles/irea-network.R')
 source('sourceFiles/global.R')
 source('sourceFiles/irea-gene-list-tab.R', local = TRUE)
@@ -197,6 +198,120 @@ output$pageStub <- renderUI(fluidPage(
                            div(style='overflow-x: auto;',
                                downloadButton("download_network_matrix", "Download Example File", class = "btn-link")),
                            HTML('<hr>'),
+                           fluidRow(
+                             # First column
+                             column(6,
+                                    #h4("B cell"),
+                                    #materialSwitch(
+                                    #  inputId = "sample_network_b_cell",
+                                    #  label = "Analyze B Cell", 
+                                    #  status = "primary",
+                                    #  right = TRUE
+                                    #),
+                                    
+                                    h4("CD4+ T cell"),
+                                    materialSwitch(
+                                      inputId = "sample_network_t_cell_cd4",
+                                      label = "Analyze CD4+ T Cell", 
+                                      status = "primary",
+                                      right = TRUE
+                                    ),
+                                    
+                                    h4("CD8+ T cell"),
+                                    materialSwitch(
+                                      inputId = "sample_network_t_cell_cd8",
+                                      label = "Analyze CD8+ T Cell", 
+                                      status = "primary",
+                                      right = TRUE
+                                    ),
+                                    
+                                    #h4("γδ T cell"),
+                                    #materialSwitch(
+                                    #  inputId = "sample_network_t_cell_gd",
+                                    #  label = "Analyze gamma-delta T Cell", 
+                                    #  status = "primary",
+                                    #  right = TRUE
+                                    #),
+                                    
+                                    h4("Treg"),
+                                    materialSwitch(
+                                      inputId = "sample_network_treg",
+                                      label = "Analyze Treg Cell", 
+                                      status = "primary",
+                                      right = TRUE
+                                    ),
+                                    
+                                    h4("NK cell"),
+                                    materialSwitch(
+                                      inputId = "sample_network_nk_cell",
+                                      label = "Analyze NK Cell", 
+                                      status = "primary",
+                                      right = TRUE
+                                    ),
+                                    
+                                    h4("pDC"),
+                                    materialSwitch(
+                                      inputId = "sample_network_pdc",
+                                      label = "Analyze pDC Cell", 
+                                      status = "primary",
+                                      right = TRUE
+                                    ),
+                                    HTML('<hr>')
+                             ), 
+                             # Second column
+                             column(6,
+                                    h4("cDC1"),
+                                    materialSwitch(
+                                      inputId = "sample_network_cdc1",
+                                      label = "Analyze cDC1 Cell", 
+                                      status = "primary",
+                                      right = TRUE
+                                    ),
+                                    h4("cDC2"),
+                                    materialSwitch(
+                                      inputId = "sample_network_cdc2",
+                                      label = "Analyze cDC2 Cell", 
+                                      status = "primary",
+                                      right = TRUE
+                                    ),
+                                    h4("MigDC"),
+                                    materialSwitch(
+                                      inputId = "sample_network_migdc",
+                                      label = "Analyze MigDC Cell", 
+                                      status = "primary",
+                                      right = TRUE
+                                    ),
+                                    #h4("Langerhans"),
+                                    #materialSwitch(
+                                    #  inputId = "sample_network_langerhans",
+                                    #  label = "Analyze Langerhans Cell", 
+                                    #  status = "primary",
+                                    #  right = TRUE
+                                    #),
+                                    h4("Macrophage"),
+                                    materialSwitch(
+                                      inputId = "sample_network_macrophage",
+                                      label = "Analyze Macrophage Cell", 
+                                      status = "primary",
+                                      right = TRUE
+                                    ),
+                                    #h4("Monocyte"),
+                                    #materialSwitch(
+                                    #  inputId = "sample_network_monocyte",
+                                    #  label = "Analyze Monocyte Cell", 
+                                    #  status = "primary",
+                                    #  right = TRUE
+                                    #),
+                                    h4("Neutrophil"),
+                                    materialSwitch(
+                                      inputId = "sample_network_neutrophil",
+                                      label = "Analyze Neutrophil Cell", 
+                                      status = "primary",
+                                      right = TRUE
+                                    ),
+                             )
+                           ),
+
                            # fluidRow(
                            #   # First column
                            #   column(6,

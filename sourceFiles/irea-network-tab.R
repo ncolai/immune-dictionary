@@ -48,6 +48,23 @@ genesC <- observeEvent(input$submit_cytokine_network, {
     cat('calculating')
     data$input_profile_C <- make_matrix(select(my_data,-1), pull(my_data,1))      # make matrix from input
     
+    cells_to_analyze = c() #vector of cells we want to analyze
+    #if (input$sample_network_b_cell) {cells_to_analyze <- c(cells_to_analyze, "B_cell")}
+    if (input$sample_network_t_cell_cd4) {cells_to_analyze <- c(cells_to_analyze, "T_cell_CD4")}
+    if (input$sample_network_t_cell_cd8) {cells_to_analyze <- c(cells_to_analyze, "T_cell_CD8")}
+    #if (input$sample_network_t_cell_gd) {cells_to_analyze <- c(cells_to_analyze, "T_cell_gd")}
+    if (input$sample_network_treg) {cells_to_analyze <- c(cells_to_analyze, "Treg")}
+    if (input$sample_network_nk_cell) {cells_to_analyze <- c(cells_to_analyze, "NK_cell")}
+    if (input$sample_network_pdc) {cells_to_analyze <- c(cells_to_analyze, "pDC")}
+    if (input$sample_network_cdc1) {cells_to_analyze <- c(cells_to_analyze, "cDC1")}
+    if (input$sample_network_cdc2) {cells_to_analyze <- c(cells_to_analyze, "cDC2")}
+    if (input$sample_network_migdc) {cells_to_analyze <- c(cells_to_analyze, "MigDC")}
+    #if (input$sample_network_langerhans) {cells_to_analyze <- c(cells_to_analyze, "Langerhans")}
+    if (input$sample_network_macrophage) {cells_to_analyze <- c(cells_to_analyze, "Macrophage")}
+    #if (input$sample_network_monocyte) {cells_to_analyze <- c(cells_to_analyze, "Monocyte")}
+    if (input$sample_network_neutrophil) {cells_to_analyze <- c(cells_to_analyze, "Neutrophil")}
+    
+    
     # check if file format is correct
     # make sure each column has a title and only numbers
     if (!isTRUE(all(is.numeric(data$input_profile_C) & -1000000 <= data$input_profile_C & data$input_profile_C <= 100000))){
@@ -69,7 +86,8 @@ genesC <- observeEvent(input$submit_cytokine_network, {
       else {
         # if there are invalid genes, show error message
         if (!identical(is_valid, 'valid')){
-          showNotification(HTML(paste0('The following genes were not found:', '<br>', paste(is_valid, collapse = ', '), '<br>', 'The calculation will proceed without these genes.', '<br><br>', 'Example mouse genes: Isg15, Irf7, Ncr1', '<br>', 'Example human genes: ISG15, IRF7, NCR1')), duration = 10, type = 'error')
+          #note that there is a significant discrepancy because tumor data is from a different dataset
+          #showNotification(HTML(paste0('The following genes were not found:', '<br>', paste(is_valid, collapse = ', '), '<br>', 'The calculation will proceed without these genes.', '<br><br>', 'Example mouse genes: Isg15, Irf7, Ncr1', '<br>', 'Example human genes: ISG15, IRF7, NCR1')), duration = 10, type = 'error')
         }
         cat('Calculating Cytokine Network Analysis...\n')
         tryCatch({
@@ -78,11 +96,14 @@ genesC <- observeEvent(input$submit_cytokine_network, {
           
           # To get cell-cell interaction
           library(openxlsx)
-          df_irea_all = IreaAll(data$input_profile_C, species = "mouse", threshold_receptor = 0.05, threshold_ligand = 0.05)
+          df_irea_all = IreaAll(data$input_profile_C, species = "mouse", threshold_receptor = 0.05, threshold_ligand = 0.05, celltypes=cells_to_analyze)
           #save(df_irea_all, file = "df_irea_all.RData")
           #load("df_irea_all.RData")
           df_irea_network = IreaNetwork(df_irea_all, require_receptor_expression = TRUE)
           df_irea_network_pos = subset(df_irea_network, ES > 0)
+          if (nrow(df_irea_network_pos) == 0) { #not enough connection data found, so throwing error
+            stop("No significant connection data found for selected combination, please try again.")
+          }
           
           data$table_tabC <- df_irea_network_pos
           
@@ -96,8 +117,8 @@ genesC <- observeEvent(input$submit_cytokine_network, {
           cat("Plot IREA\n")
         },
         error = function(e){
-          showNotification('Error in calculation. Please try again with a different cell type.', duration = NULL, type = 'error')
-          print(e)
+          showNotification(paste0("Error: ", e), duration = NULL, type = 'error')
+          #print(e)
           data$input_profile_C = NULL
           data$table_tabC = NULL
           data$irea_plot_C = NULL
