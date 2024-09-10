@@ -283,7 +283,7 @@ IreaNetworkCircosAll = function(df_irea_network) {
   par(mar = c(0,1,0,0))
   plot(x=rep(0, num_cytokines), y=1:num_cytokines, col = cytokine_colors[as.character(unique_cytokines)], pch = 15,
        xaxt='n', yaxt='n', ann=FALSE, bty="n", xlim = c(0, 1), ylim = c(num_cytokines, 1))
-  text(x=rep(0, num_cytokines), y=1:num_cytokines, labels = as.character(unique_cytokines), col="black", pos = 4)
+  text(x=rep(0, num_cytokines), y=1:num_cytokines, labels = as.character(unique_cytokines), col="black", pos = 4, cex=1.2)
   
   
   
