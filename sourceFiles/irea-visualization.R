@@ -300,6 +300,7 @@ IreaNetworkCircosAll = function(df_irea_network) {
 IreaNetworkCircosIndividual = function(df_irea_network, n_cols = 5, cytokines_to_plot = "all") {
   
   library(circlize)
+  library(colorspace)
   circos.clear()
   
   # Select the cytokines to plot

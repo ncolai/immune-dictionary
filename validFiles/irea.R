@@ -5,6 +5,11 @@ library(shinyWidgets)
 library(readxl)
 library(shinyjs)
 library(tidyverse)
+
+cytokineList <- c(readLines("sourceFiles/cytokine_list.txt"), "")
+newCytokineList <- subset(read.xlsx("dataFiles/irea_cytokine_list.xlsx"), select = "Cytokine_DisplayName")
+
+
 source('sourceFiles/irea-function.R')
 source('sourceFiles/irea-visualization.R')
 source('sourceFiles/irea-receptor.R')
@@ -13,6 +18,7 @@ source('sourceFiles/global.R')
 source('sourceFiles/irea-gene-list-tab.R', local = TRUE)
 source('sourceFiles/irea-gene-matrix-tab.R', local = TRUE)
 source('sourceFiles/irea-network-tab.R', local = TRUE)
+
 
 cellList <- c(" ", readLines("sourceFiles/lig_seurat_data.txt"))
 
@@ -410,6 +416,14 @@ output$pageStub <- renderUI(fluidPage(
                   text-align: left;'),
                            HTML('<br><br>'),
                            hidden(numericInput("network_genediff_cutoff", "Gene Diff Cutoff", 0.25, min = 0, max = 1, step = 0.05)),
+                           #radioGroupButtons(inputId = "network_type_cytokines", 
+                                             #label = "Choose Cytokine Input", 
+                                             #choices = c("All", "Input"), justified = TRUE),
+                           radioButtons(inputId="network_type_cytokines", label="Choose Cytokine Input",
+                                        choices=c("All cytokines" = "all", "Individual cytokines" = "individual")),
+                           #selectInput("network_inputCytokines", "Choose Cytokine Input", 
+                                       #choices = cytokineList,
+                                       #multiple = TRUE),
                            h3("Submit"),
                            actionButton("submit_cytokine_network", "Analyze Cytokine Network", class = "btn-block"),
                            HTML('<hr>'), 
