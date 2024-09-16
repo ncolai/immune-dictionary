@@ -3,6 +3,12 @@ first_visit_tab <- reactiveValues(A = TRUE,
                                   C = TRUE,
                                   D = TRUE,
                                   E = TRUE)
+if (!exists('example_plots')){
+  cat('Loading data\n')
+  #example_plots <- readRDS("dataFiles/example_plots.rds")
+  example_plots <- qread("dataFiles/example_plots.qs")
+  cat('Loaded data')
+}
 
 observe({
   req(input$inputGene)

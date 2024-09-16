@@ -1,17 +1,17 @@
 observeEvent(input$submit_compass_list, {
   runjs("$('.busy').show();")
-  hideElement("plot")
-  hideElement("download")
-  hideElement("table")
-  hideElement("download_table")
+  hide("plot")
+  hide("download")
+  hide("table")
+  hide("download_table")
 }, priority = 1, ignoreInit = TRUE)
 
 observeEvent(input$submit_radar_list, {
   runjs("$('.busy').show();")
-  hideElement("plot")
-  hideElement("download")
-  hideElement("table")
-  hideElement("download_table")
+  hide("plot")
+  hide("download")
+  hide("table")
+  hide("download_table")
 }, priority = 1, ignoreInit = TRUE)
 
 observeEvent(input$dropdown_btn,{
@@ -30,17 +30,11 @@ observeEvent(input$gene_file, {
 
 genes <- observeEvent(input$submit_compass_list,{
   # hide tab B results
-  hideElement("plot_B")
-  hideElement("download_B")
-  hideElement("table_B")
-  hideElement("download_table_B")
-  hideElement("radio_btns_B")
-  
-  #hide tab C results
-  hideElement("plot_C")
-  hideElement("download_C")
-  hideElement("table_C")
-  hideElement("download_table_C")
+  hide("plot_B")
+  hide("download_B")
+  hide("table_B")
+  hide("download_table_B")
+  hide("radio_btns_B")
   
   if (input$inputGene != '' & input$inputCell != ' '){
     split_genes_vector <- split_input(input$inputGene)
@@ -53,7 +47,7 @@ genes <- observeEvent(input$submit_compass_list,{
         showNotification(HTML(paste0('The following genes were not found:', '<br>', paste(is_valid, collapse = ', '), '<br>', 'The calculation will proceed without these genes.', '<br><br>', 'Example mouse genes: Isg15, Irf7, Ncr1', '<br>', 'Example human genes: ISG15, IRF7, NCR1')), type = 'error')
       }
       print(split_genes_vector)
-      cat('Calculating Gene Set Enrichment Score...\n')
+      cat('Calculating Gene Set Enrichment Score (IREA)...\n')
       tryCatch({
         if (input$inputMethod == 'Score'){
           # Use GeneSetEnrichmentScore for table and plot
@@ -74,70 +68,6 @@ genes <- observeEvent(input$submit_compass_list,{
         }
       },
       error = function(e){
-        showNotification('Error in calculation. Please try again with a different cell type.', duration = NULL, type = 'error')
-        data$table = NULL
-        data$irea_plot = NULL
-      })
-      
-    }
-  } 
-  else {
-    showNotification('Please enter in genes and select a cell type.', type = 'error')
-  }
-  # show end results
-  showElement("plot")
-  showElement("download")
-  showElement("table")
-  showElement("download_table")
-  runjs("$('.busy').hide();")
-}, ignoreInit = TRUE)
-
-genes <- observeEvent(input$submit_radar_list,{
-  # hide tab B results
-  hideElement("plot_B")
-  hideElement("download_B")
-  hideElement("table_B")
-  hideElement("download_table_B")
-  hideElement("radio_btns_B")
-  
-  #hide tab C results
-  hideElement("plot_C")
-  hideElement("download_C")
-  hideElement("table_C")
-  hideElement("download_table_C")
-  
-  if (input$inputGene != '' & input$inputCell != ' '){
-    split_genes_vector <- split_input(input$inputGene)
-    is_valid <- valid_genes(split_genes_vector, species = tolower(input$speciesInput))
-    if (is_valid == 'invalid'){
-      showNotification(HTML(paste0('Please enter in valid genes.', '<br><br>', 'Example mouse genes: Isg15, Irf7, Ncr1', '<br>', 'Example human genes: ISG15, IRF7, NCR1')), type = 'error')
-    }
-    else {
-      if (is_valid != 'valid'){
-        showNotification(HTML(paste0('The following genes were not found:', '<br>', paste(is_valid, collapse = ', '), '<br>', 'The calculation will proceed without these genes.', '<br><br>', 'Example mouse genes: Isg15, Irf7, Ncr1', '<br>', 'Example human genes: ISG15, IRF7, NCR1')), type = 'error')
-      }
-      print(split_genes_vector)
-      cat('Calculating Gene Set Enrichment Score...\n')
-      tryCatch({
-        if (input$inputMethod == 'Score'){
-          # Use GeneSetEnrichmentScore for table and plot
-          df_irea = PolarizationGeneSetEnrichmentScore(split_genes_vector, input$inputCell, species = tolower(input$speciesInput))
-          data$table = df_irea[,c(5,1,2,3)] %>%
-            arrange(desc(ES)) %>%
-            plyr::rename(c("ES" = "Enrichment Score"))
-          print(df_irea)
-          data$irea_plot = IreaRadarPlot(df_irea, input_celltype = input$inputCell)
-        }
-        else {
-          # Use GeneSetEnrichmentHyperTest for table and plot
-          df_irea = PolarizationGeneSetEnrichmentHyperTest(split_genes_vector, input$inputCell, species = tolower(input$speciesInput))
-          data$table = df_irea[,c(1,2,3,4)] %>%
-            arrange(pval) %>%
-            plyr::rename(c("ES" = "Enrichment Score"))
-          data$irea_plot = IreaRadarPlot(df_irea, input_celltype = input$inputCell)
-        }
-      },
-      error = function(e){
         print(e)
         showNotification('Error in calculation. Please try again with a different cell type.', duration = NULL, type = 'error')
         data$table = NULL
@@ -150,14 +80,83 @@ genes <- observeEvent(input$submit_radar_list,{
     showNotification('Please enter in genes and select a cell type.', type = 'error')
   }
   # show end results
-  showElement("plot")
-  showElement("download")
-  showElement("table")
-  showElement("download_table")
+  show("plot")
+  show("download")
+  show("table")
+  show("download_table")
   runjs("$('.busy').hide();")
 }, ignoreInit = TRUE)
 
-output$table <- renderDataTable({
+genes <- observeEvent(input$submit_radar_list,{
+  # hide tab B results
+  hide("plot_B")
+  hide("download_B")
+  hide("table_B")
+  hide("download_table_B")
+  hide("radio_btns_B")
+  
+  
+  
+  if (input$inputGene != '' & input$inputCell != ' '){
+    split_genes_vector <- split_input(input$inputGene)
+    is_valid <- valid_genes(split_genes_vector, species = tolower(input$speciesInput))
+    if (is_valid == 'invalid'){
+      showNotification(HTML(paste0('Please enter in valid genes.', '<br><br>', 'Example mouse genes: Isg15, Irf7, Ncr1', '<br>', 'Example human genes: ISG15, IRF7, NCR1')), type = 'error')
+    }
+    else {
+      if (is_valid != 'valid'){
+        showNotification(HTML(paste0('The following genes were not found:', '<br>', paste(is_valid, collapse = ', '), '<br>', 'The calculation will proceed without these genes.', '<br><br>', 'Example mouse genes: Isg15, Irf7, Ncr1', '<br>', 'Example human genes: ISG15, IRF7, NCR1')), type = 'error')
+      }
+      print(split_genes_vector)
+      cat('Calculating Gene Set Enrichment Score (Polarization)...\n')
+      tryCatch({
+        if (input$inputMethod == 'Score'){
+          # Use GeneSetEnrichmentScore for table and plot
+          df_irea = PolarizationGeneSetEnrichmentScore(split_genes_vector, input$inputCell, species = tolower(input$speciesInput))
+          data$table = df_irea[,c(5,1,2,3)] %>%
+            arrange(desc(ES)) %>%
+            plyr::rename(c("ES" = "Enrichment Score"))
+          print(df_irea)
+          data$irea_plot = IreaRadarPlot(df_irea, input_celltype = input$inputCell)
+        }
+        else {
+          print('hyper test')
+          # Use GeneSetEnrichmentHyperTest for table and plot
+          df_irea = PolarizationGeneSetEnrichmentHyperTest(split_genes_vector, input$inputCell, species = tolower(input$speciesInput))
+          data$table = df_irea[,c(1,2,3,4)] %>%
+            arrange(pval) %>%
+            plyr::rename(c("ES" = "Enrichment Score"))
+          data$irea_plot = IreaRadarPlot(df_irea, input_celltype = input$inputCell)
+        }
+      },
+      error = function(e){
+        print(e)
+        #showNotification('Error in calculation. Please try again with a different cell type.', duration = NULL, type = 'error')
+        showNotification(paste0('Error in calculation. Please try again with a different cell type.'), duration = NULL, type = 'error')
+        data$table = NULL
+        data$irea_plot = NULL
+      })
+      
+    }
+  } 
+  else {
+    showNotification('Please enter in genes and select a cell type.', type = 'error')
+  }
+  # show end results
+  show("plot")
+  show("download")
+  show("table")
+  show("download_table")
+  runjs("$('.busy').hide();")
+}, ignoreInit = TRUE)
+
+# output$table <- renderDataTable({
+#   # display table data
+#   req(data$table)
+#   data$table
+# })
+
+output$table <- DT::renderDT({
   # display table data
   req(data$table)
   data$table
@@ -175,12 +174,11 @@ output$plot <- renderPlot({
 
 output$download <- renderUI({
   # if plot is shown, display download buttons for plot
-  if(!is.null(plotInput())) {
+  req(data$irea_plot)
     tagList(downloadButton('downloadPDF', 'Download as PDF'),
             downloadButton('downloadPNG', 'Download as PNG'),
             downloadButton('downloadJPG', 'Download as JPG'),
             HTML("<br><br><br>"))
-  }
 })
 
 output$download_table <- renderUI({
@@ -195,13 +193,15 @@ output$download_table <- renderUI({
 
 
 output$downloadPDF <- downloadHandler(
-  filename = "IREA_plot.pdf",
+  filename = function() {paste("IREA_plot_", Sys.Date(), ".pdf", sep = "")},
   content = function(file) {
-    cairo_pdf(file, 6, 6)
+    pdf(file, width = 6,
+        height = 6,
+        paper = "special")
     print(plotInput())
     dev.off()
-  })  
-
+  }
+)
 
 output$downloadPNG <- downloadHandler(
   filename = "IREA_plot.png",

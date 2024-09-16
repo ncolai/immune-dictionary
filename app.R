@@ -4,14 +4,18 @@ library(shiny)
 library(dplyr)
 library(patchwork)
 library(googlesheets4)
-library(fst)
 library(qs)
-library(Seurat)
-library(openxlsx)
+library(fst)
+library(anndata)
 
 # put a message in console or server log; note this happens only when the app is started!
 cat("uiStub application started...\n")
 
+if ((!exists('profiles_cc')) || (!exists('metadata_cc'))){
+  cat('Loading data\n')
+  load("dataFiles/celltype_obj.RData")
+  cat('Loaded data')
+}
 
 css <- ".shiny-notification {
           position:fixed;
@@ -23,12 +27,6 @@ ui <- fluidPage(
   tags$head(includeHTML("htmlFiles/google_analytics.html")),
   uiOutput("uiStub")                               # single-output stub ui
 )
-
-if (!exists('example_plots')){
-  cat('Loading data\n')
-  example_plots <- qread("dataFiles/example_plots.qs")
-  cat('Loaded data')
-}
 
 server <- function(input, output, session) {
   cat("Session started.\n")                               # this prints when a session starts
@@ -43,25 +41,10 @@ server <- function(input, output, session) {
         # fluidRow(
         #   column(12, includeHTML("htmlFiles/mainPage.html"))
         # ),
-        #div(
-          #id = "loading_page",
-          #h1("loading...")
-        #),
-        div(
-          id = "main_content",
-          uiOutput("pageStub")
-        )
-        #uiOutput("pageStub")                  # loaded server code should render the
+        uiOutput("pageStub")                  # loaded server code should render the
       )                                           #    rest of the page to this output$
     )
   })
-  output$pageStub <- renderUI(tagList(              # 404 if no file with that name
-    fluidRow(
-      column(5,
-             HTML("<h2>Loading...</h2>")
-      )
-    )
-  ))
   
   # load server code for page specified in URL
   validFiles = c("home.R",
@@ -71,9 +54,11 @@ server <- function(input, output, session) {
                  "download.R",
                  "instructions.R",
                  "contact.R")                     #    for security (use all lower-case
+                                                  #    names to prevent Unix case problems)
   fname = isolate(session$clientData$url_search)       # isolate() deals with reactive context
   if(nchar(fname)==0) { fname = "?home" }              # blank means home page
   fname = paste0(substr(fname, 2, nchar(fname)), ".R") # remove leading "?", add ".R"
+  
   
   if(!fname %in% validFiles){                          # is that one of our files?
     output$pageStub <- renderUI(tagList(              # 404 if no file with that name

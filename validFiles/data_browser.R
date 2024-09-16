@@ -10,6 +10,10 @@ library(patchwork)
 library(cowplot)
 library(openxlsx)
 library(fst)
+#library(furrr)
+#library(future)
+library(webshot2)
+library(htmlwidgets)
 
 cellList <- c(readLines("sourceFiles/lig_seurat_data.txt"))
 cytokineList <- c(readLines("sourceFiles/cytokine_list.txt"), "")
@@ -22,7 +26,14 @@ source('sourceFiles/data_browser_autogenerate.R', local = TRUE)
 source('sourceFiles/data_browser_heat_map.R', local = TRUE)
 source('sourceFiles/data_browser_violin_plot.R', local = TRUE)
 source('sourceFiles/data_browser_box_plot.R', local = TRUE)
-source('sourceFiles/data_browser_umap.R', local = TRUE)
+source('sourceFiles/data_browser_umap_good.R', local = TRUE)
+
+#if (!exists('example_plots')){
+#  cat('Loading data\n')
+#  #example_plots <- readRDS("dataFiles/example_plots.rds")
+#  example_plots <- qread("dataFiles/example_plots.qs")
+#  cat('Loaded data')
+#}
 
 css <- "
 .shiny-notification {

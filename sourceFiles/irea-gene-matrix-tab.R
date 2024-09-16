@@ -9,44 +9,38 @@ make_matrix <- function(df,rownames = NULL){
 observeEvent(input$submit_compass_matrix, {
   # hide results during calculation
   runjs("$('.busy').show();")
-  hideElement("plot_B")
-  hideElement("download_B")
-  hideElement("table_B")
-  hideElement("download_table_B")
-  hideElement("radio_btns_B")
+  hide("plot_B")
+  hide("download_B")
+  hide("table_B")
+  hide("download_table_B")
+  hide("radio_btns_B")
 }, priority = 1, ignoreInit = TRUE)
 
 observeEvent(input$submit_radar_matrix, {
   # hide results during calculation
   runjs("$('.busy').show();")
-  hideElement("plot_B")
-  hideElement("download_B")
-  hideElement("table_B")
-  hideElement("download_table_B")
-  hideElement("radio_btns_B")
+  hide("plot_B")
+  hide("download_B")
+  hide("table_B")
+  hide("download_table_B")
+  hide("radio_btns_B")
 }, priority = 1, ignoreInit = TRUE)
 
 
 observeEvent(input$dropdown_btn2,{
   # hide/show optional parameters on click
   toggle('genediff_cutoff')
-  #toggle('speciesInputB')
+  toggle('speciesInputB')
 })
 
 
 genesB <- observeEvent(input$submit_compass_matrix, {
   `%notin%` = Negate(`%in%`)
   # hide tab A results
-  hideElement("plot")
-  hideElement("download")
-  hideElement("table")
-  hideElement("download_table")
-  
-  #hide tab C results
-  hideElement("plot_C")
-  hideElement("download_C")
-  hideElement("table_C")
-  hideElement("download_table_C")
+  hide("plot")
+  hide("download")
+  hide("table")
+  hide("download_table")
   
   if ((!is.null(input$matrix_file) | input$sample_matrix) & input$inputCell_tabB != ' '){
     if (input$sample_matrix){
@@ -70,11 +64,10 @@ genesB <- observeEvent(input$submit_compass_matrix, {
     }
     else{
       # check if genes are valid
-      # Parameter removed: ", species = tolower(input$speciesInput)"
-      is_valid <- valid_genes(rownames(data$input_profile))
+      is_valid <- valid_genes(rownames(data$input_profile), species = tolower(input$speciesInputB))
       
       if (is_valid == 'invalid'){
-        showNotification('Please submit valid genes in the first column.', duration = NULL, type = 'error')
+        showNotification(HTML(paste0('Please enter in valid genes.', '<br><br>', 'Example mouse genes: Isg15, Irf7, Ncr1', '<br>', 'Example human genes: ISG15, IRF7, NCR1')), type = 'error')
         data$input_profile <- NULL
         data$table_tabB = NULL
         data$irea_plot_B = NULL
@@ -91,7 +84,7 @@ genesB <- observeEvent(input$submit_compass_matrix, {
           data$table_tabB <- GetEnrichmentScoreProjection(input_profile = data$input_profile, 
                                                           input_celltype = input$inputCell_tabB, 
                                                           genediff_cutoff = input$genediff_cutoff, 
-                                                          species = "mouse")
+                                                          species = input$speciesInputB)
           cat("Got data table\n")
           # df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
           data$irea_plot_type <- "Compass"
@@ -115,26 +108,20 @@ genesB <- observeEvent(input$submit_compass_matrix, {
     showNotification('Please upload gene matrix file and select a cell type.', type = 'error')
   }
   runjs("$('.busy').hide();")
-  showElement("plot_B")
-  showElement("download_B")
-  showElement("table_B")
-  showElement("download_table_B")
-  showElement("radio_btns_B")
+  show("plot_B")
+  show("download_B")
+  show("table_B")
+  show("download_table_B")
+  show("radio_btns_B")
 }, ignoreInit = TRUE)
 
 genesB <- observeEvent(input$submit_radar_matrix, {
   `%notin%` = Negate(`%in%`)
   # hide tab A results
-  hideElement("plot")
-  hideElement("download")
-  hideElement("table")
-  hideElement("download_table")
-  
-  #hide tab C results
-  hideElement("plot_C")
-  hideElement("download_C")
-  hideElement("table_C")
-  hideElement("download_table_C")
+  hide("plot")
+  hide("download")
+  hide("table")
+  hide("download_table")
   
   if ((!is.null(input$matrix_file) | input$sample_matrix) & input$inputCell_tabB != ' '){
     if (input$sample_matrix){
@@ -158,11 +145,10 @@ genesB <- observeEvent(input$submit_radar_matrix, {
     }
     else{
       # check if genes are valid
-      # Removed parameter: ", species = tolower(input$speciesInput)"
-      is_valid <- valid_genes(rownames(data$input_profile))
+      is_valid <- valid_genes(rownames(data$input_profile), species = tolower(input$speciesInputB))
       
       if (is_valid == 'invalid'){
-        showNotification('Please submit valid genes in the first column.', duration = NULL, type = 'error')
+        showNotification(HTML(paste0('Please enter in valid genes.', '<br><br>', 'Example mouse genes: Isg15, Irf7, Ncr1', '<br>', 'Example human genes: ISG15, IRF7, NCR1')), type = 'error')
         data$input_profile <- NULL
         data$table_tabB = NULL
         data$irea_plot_B = NULL
@@ -179,12 +165,13 @@ genesB <- observeEvent(input$submit_radar_matrix, {
           data$table_tabB <- PolarizationProjection(input_profile = data$input_profile, 
                                                     input_celltype = input$inputCell_tabB, 
                                                     genediff_cutoff = input$genediff_cutoff, 
-                                                    species = "mouse")
+                                                    species = input$speciesInputB)
           #df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
           data$irea_plot_type <- "Radar"
         },
         error = function(e){
           showNotification('Error in calculation. Please try again with a different cell type.', duration = NULL, type = 'error')
+          cat(e)
           data$input_profile = NULL
           data$table_tabB = NULL
           data$irea_plot_B = NULL
@@ -197,11 +184,11 @@ genesB <- observeEvent(input$submit_radar_matrix, {
     showNotification('Please upload gene matrix file and select a cell type.', type = 'error')
   }
   runjs("$('.busy').hide();")
-  showElement("plot_B")
-  showElement("download_B")
-  showElement("table_B")
-  showElement("download_table_B")
-  showElement("radio_btns_B")
+  show("plot_B")
+  show("download_B")
+  show("table_B")
+  show("download_table_B")
+  show("radio_btns_B")
 }, ignoreInit = TRUE)
 
 output$table_B <- renderDataTable({
@@ -261,10 +248,10 @@ output$download_matrix <- downloadHandler(
 observeEvent(input$sample_matrix, {
   # session$sendCustomMessage("upload_txt", "SOME OTHER TEXT")
   if (input$sample_matrix == TRUE){
-    hideElement('matrix_file')
+    hide('matrix_file')
   }
   else{
-    showElement('matrix_file')
+    show('matrix_file')
   }
 })
 

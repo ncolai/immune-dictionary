@@ -36,9 +36,9 @@ IreaCompassPlot = function(df_irea, color_by = c("pval", "ES"), plot_receptor = 
   text_angle = c(seq(0,-180,length.out = 43), seq(360, 180, length.out = 43))
   
   # Order cytokines to be displayed by enrichment score
-  #unique_cytokines <- unique(df_irea$Cytokine)
-  #df_irea$Cytokine = factor(unique_cytokines, levels = unique_cytokines[order(df_irea$NES)])
-  df_irea$Cytokine = factor(df_irea$Cytokine, levels = unique(df_irea$Cytokine[order(df_irea$NES)]))
+  unique_cytokines <- unique(df_irea$Cytokine)
+  df_irea$Cytokine = factor(unique_cytokines, levels = unique_cytokines[order(df_irea$NES)])
+  # df_irea$Cytokine = factor(df_irea$Cytokine, levels = df_irea$Cytokine[order(df_irea$NES)])
   
   
   # Annotation data frame, which is used to add text (cytokine names) with a specific angle
@@ -283,13 +283,12 @@ IreaNetworkCircosAll = function(df_irea_network) {
   par(mar = c(0,1,0,0))
   plot(x=rep(0, num_cytokines), y=1:num_cytokines, col = cytokine_colors[as.character(unique_cytokines)], pch = 15,
        xaxt='n', yaxt='n', ann=FALSE, bty="n", xlim = c(0, 1), ylim = c(num_cytokines, 1))
-  text(x=rep(0, num_cytokines), y=1:num_cytokines, labels = as.character(unique_cytokines), col="black", pos = 4, cex=1.2)
+  text(x=rep(0, num_cytokines), y=1:num_cytokines, labels = as.character(unique_cytokines), col="black", pos = 4)
   
   
   
   par(mfrow = c(1, 1)) # Put plotting arrangement back to original state
   
-  return(recordPlot())
 }
 
 
@@ -300,7 +299,6 @@ IreaNetworkCircosAll = function(df_irea_network) {
 IreaNetworkCircosIndividual = function(df_irea_network, n_cols = 5, cytokines_to_plot = "all") {
   
   library(circlize)
-  library(colorspace)
   circos.clear()
   
   # Select the cytokines to plot
@@ -309,8 +307,7 @@ IreaNetworkCircosIndividual = function(df_irea_network, n_cols = 5, cytokines_to
   }
   
   # Prepare data for circos plot
-  #cytokine_spreadsheet = read.xlsx("~/Dropbox/Hacohen/ligands/spreadsheets/cytokine_list.xlsx")
-  cytokine_spreadsheet = read.xlsx("dataFiles/cytokine_list.xlsx")
+  cytokine_spreadsheet = read.xlsx("~/Dropbox/Hacohen/ligands/spreadsheets/cytokine_list.xlsx")
   
   unique_cytokines = unique(df_irea_network$Cytokine)
   unique_cytokines = factor(unique_cytokines, levels = setdiff(cytokine_spreadsheet$Cytokine_DisplayName, "Combo"))
@@ -326,7 +323,7 @@ IreaNetworkCircosIndividual = function(df_irea_network, n_cols = 5, cytokines_to
   # names(cytokine_colors) = unique_cytokines
   
   # Load the cell type color list
-  celltype_spreadsheet = read.xlsx("dataFiles/celltype_list.xlsx")
+  celltype_spreadsheet = read.xlsx("~/Dropbox/Hacohen/ligands/spreadsheets/celltype_list.xlsx")
   # Arrange cell types to be plotted around the circle based on pre-defined list
   unique_celltypes = unique_celltypes_unordered[na.omit(order(match(unique_celltypes_unordered, celltype_spreadsheet$Celltype_DisplayName)))]
   
@@ -357,8 +354,6 @@ IreaNetworkCircosIndividual = function(df_irea_network, n_cols = 5, cytokines_to
   }
   
   par(mfrow = c(1, 1)) # Put plotting arrangement back to original state
-  
-  return(recordPlot())
 }
 
 

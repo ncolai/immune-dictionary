@@ -110,4 +110,3 @@ output$pageStub <- renderUI(fluidPage(
       p("Replace ", code('"input$cellType"'), " with the celltype you are interested in. Replace ",code('"input$InputGene"'),"with the gene of interest")
   )
 ))
-
