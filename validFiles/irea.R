@@ -188,7 +188,7 @@ output$pageStub <- renderUI(fluidPage(
                         width: 100%;
                         text-align: left;
                         margin-bottom: 5px;',
-                               HTML('Upload Gene Matrix Files for at least 2 cell types for the Cytokine Network Analysis')
+                               HTML('Upload an Excel file containing the gene information for Cytokine Network Analysis. See example for how to format excel file.')
                            ),
                            
                            fileInput("network_matrix_singlefile", label = NULL,
@@ -204,6 +204,18 @@ output$pageStub <- renderUI(fluidPage(
                            div(style='overflow-x: auto;',
                                downloadButton("download_network_matrix", "Download Example File", class = "btn-link")),
                            HTML('<hr>'),
+                           div(style=
+                                 'padding: 0;
+                        margin: 0;
+                        color: black;
+                        font-weight: bold;
+                        font-size: 1em;
+                        white-space: normal;
+                        width: 100%;
+                        text-align: left;
+                        margin-bottom: 5px;',
+                               HTML('Choose 2 or more cells to analyze'),
+                           ),
                            fluidRow(
                              # First column
                              column(6,

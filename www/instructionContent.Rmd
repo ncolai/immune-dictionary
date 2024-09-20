@@ -148,18 +148,25 @@ In this analysis, we can analyze gene matrix files from at least two cell types 
 
 **How to Use**:
 
-1. **Upload Gene Matrix Files**:
-    - Upload gene matrix files for at least two cell types.
-    - Example files are available for different cell types (e.g., B cell, CD4+ T cell, etc.).
-
-2. **Optional Parameters**:
+ 1. **Upload Gene Matrix Files**:
     - Click the ‘Optional Parameters’ button to reveal additional settings.
-
-3. **Submit**:
-    - Click “Analyze Cytokine Network” to perform the analysis.
-
-4. **Results**:
-    - Analysis might take approximately 10 minutes per cell type. Results will be available upon completion.
+    - Upload gene matrix files in excel form. Consult the example file as a reference for what this excel file should look like. 
+    - Alternatively, you may use the example file for analysis.
+    
+2. **Select Cell Types**:
+    - Choose the cell types to analyze for connections. At least 2 required to run properly. 
+ 
+3. **Optional parameters**:
+    - click the ‘optional parameters’ button to reveal additional settings.
+    
+4. **Choose Cytokine Input**:
+    - Specify whether to graph all connections together or separate cytokines.
+    
+5. **Submit**:
+     - Click “Analyze Cytokine Network” to perform the analysis.
+ 
+6. **Results**:
+     - Analysis might take approximately 10 minutes per cell type. Results will be available upon completion.
     
 ## [Reference Cards](#top) 
 The Immune dictionary application displays reference cards for various immune cell polarization states as described in the publication "Dictionary of immune responses to cytokines at single-cell resolution."
