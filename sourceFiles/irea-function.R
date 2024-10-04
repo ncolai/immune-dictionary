@@ -22,8 +22,11 @@ GeneSetEnrichmentScore = function(degs, input_celltype, species = "mouse") {
   # Load reference data
   ## TODO: to speed up, can save each cell type into a different Rds file
   ## TODO: to speed up, subset the gene list to only include the genes that are >0.01 (or other threshold) between cytokine and PBS
-  lig_seurat = readRDS("dataFiles/lig_seurat.Rda")
-  lig_seurat = subset(lig_seurat, celltype == input_celltype)
+  #lig_seurat = readRDS("dataFiles/lig_seurat.Rda")
+  #lig_seurat = subset(lig_seurat, celltype == input_celltype)
+  
+  #TODO: fix all references here to align with Lawrence's changes
+  lig_seurat = readRDS(paste0("dataFiles/ireaData/", input_celltype, ".RDS"))
   
   # Change to official cytokine name
   cytokine_spreadsheet = read.xlsx("dataFiles/irea_cytokine_list.xlsx")
@@ -31,9 +34,15 @@ GeneSetEnrichmentScore = function(degs, input_celltype, species = "mouse") {
                                 from = cytokine_spreadsheet$Cytokine_OriginalName,
                                 to = cytokine_spreadsheet$Cytokine_DisplayName, warn_missing = FALSE)
   
+  lig_seurat$Metadata$sample = mapvalues(lig_seurat$Metadata$sample,
+                                    from = cytokine_spreadsheet$Cytokine_OriginalName,
+                                    to = cytokine_spreadsheet$Cytokine_DisplayName, 
+                                    warn_missing = FALSE)
   
-  cytokines = setdiff(sort(unique(lig_seurat@meta.data$sample)), "PBS")
-  profiles_cc = as.matrix(lig_seurat@assays[['RNA']]@data)
+  #cytokines = setdiff(sort(unique(lig_seurat@meta.data$sample)), "PBS")
+  #profiles_cc = as.matrix(lig_seurat@assays[['RNA']]@data)
+  cytokines = setdiff(sort(unique(lig_seurat$Metadata$sample)), "PBS")
+  profiles_cc = as.matrix(lig_seurat$RNA_data)
   
   if (species == "human") {
     # TODO: can actually save these datasets in RDS as human references to speed up
@@ -57,7 +66,8 @@ GeneSetEnrichmentScore = function(degs, input_celltype, species = "mouse") {
   profiles_cc_genes = profiles_cc[degs_to_include, ]
   
   # Calculate enrichment scores
-  scores_tmp = aggregate(t(profiles_cc_genes), by = list(lig_seurat@meta.data$sample), mean)
+  #scores_tmp = aggregate(t(profiles_cc_genes), by = list(lig_seurat@meta.data$sample), mean)
+  scores_tmp = aggregate(t(profiles_cc_genes), by = list(lig_seurat$Metadata$sample), mean)
   rownames(scores_tmp) = scores_tmp$Group.1
   scores_tmp$Group.1 = NULL
   scores = apply(scores_tmp, 1, sum)
@@ -69,8 +79,10 @@ GeneSetEnrichmentScore = function(degs, input_celltype, species = "mouse") {
   # Assess the significance of enrichment using the Wilcoxon rank sum test between gene set scores on cytokine treated cells
   # and gene set scores on PBS treated cells
   scores_pvals = sapply(cytokines, function(x){
-    test_res = wilcox.test(apply(profiles_cc_genes[, rownames(subset(lig_seurat@meta.data, sample == x))], 2, sum),
-                           apply(profiles_cc_genes[, rownames(subset(lig_seurat@meta.data, sample == "PBS"))], 2, sum));
+    #test_res = wilcox.test(apply(profiles_cc_genes[, rownames(subset(lig_seurat@meta.data, sample == x))], 2, sum),
+                           #apply(profiles_cc_genes[, rownames(subset(lig_seurat@meta.data, sample == "PBS"))], 2, sum));
+    test_res = wilcox.test(apply(profiles_cc_genes[, rownames(subset(lig_seurat$Metadata, sample == x))], 2, sum),
+                           apply(profiles_cc_genes[, rownames(subset(lig_seurat$Metadata, sample == "PBS"))], 2, sum));
     return(test_res$p.value)
   })
   df_irea$pval = as.vector(scores_pvals)
@@ -385,8 +397,11 @@ GetEnrichmentScoreProjection = function(input_profile, input_celltype, genediff_
   set.seed(0)
   `%notin%` = Negate(`%in%`)
   celltypes = c("ILC", readLines("sourceFiles/lig_seurat_data.txt"))
-  lig_seurat = readRDS("dataFiles/lig_seurat.Rda")
-  lig_seurat_sub = subset(lig_seurat, celltype == input_celltype)
+  
+  #lig_seurat = readRDS("dataFiles/lig_seurat.Rda")
+  #lig_seurat_sub = subset(lig_seurat, celltype == input_celltype)
+  
+  lig_seurat_sub = readRDS(paste0("dataFiles/ireaData/", input_celltype, ".RDS"))
   
   # Change to official cytokine name
   cytokine_spreadsheet = read.xlsx("dataFiles/irea_cytokine_list.xlsx")
@@ -394,12 +409,19 @@ GetEnrichmentScoreProjection = function(input_profile, input_celltype, genediff_
                                     from = cytokine_spreadsheet$Cytokine_OriginalName,
                                     to = cytokine_spreadsheet$Cytokine_DisplayName, 
                                     warn_missing = FALSE)
+  
+  lig_seurat_sub$Metadata$sample = mapvalues(lig_seurat_sub$Metadata$sample,
+                                    from = cytokine_spreadsheet$Cytokine_OriginalName,
+                                    to = cytokine_spreadsheet$Cytokine_DisplayName, 
+                                    warn_missing = FALSE)
   print("files mapped")
   print(head(lig_seurat_sub$sample))
   
-  profiles_cc = as.matrix(lig_seurat_sub@assays[['RNA']]@data)
+  #profiles_cc = as.matrix(lig_seurat_sub@assays[['RNA']]@data)
+  profiles_cc = as.matrix(lig_seurat_sub$RNA_data)
   print(profiles_cc)
-  metadata_cc = lig_seurat_sub@meta.data
+  #metadata_cc = lig_seurat_sub@meta.data
+  metadata_cc = lig_seurat_sub$Metadata
   print(metadata_cc)
   print("cc loaded")
   

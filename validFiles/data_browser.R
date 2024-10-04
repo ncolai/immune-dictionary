@@ -22,7 +22,7 @@ source('sourceFiles/data_browser_autogenerate.R', local = TRUE)
 source('sourceFiles/data_browser_heat_map.R', local = TRUE)
 source('sourceFiles/data_browser_violin_plot.R', local = TRUE)
 source('sourceFiles/data_browser_box_plot.R', local = TRUE)
-source('sourceFiles/data_browser_umap.R', local = TRUE)
+source('sourceFiles/data_browser_umap_good.R', local = TRUE)
 
 css <- "
 .shiny-notification {
