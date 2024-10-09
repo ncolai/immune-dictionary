@@ -132,7 +132,7 @@ submit_btn_celltype2 <- observeEvent(input$violinSubmit,{
       fig <- ggplotly(p)
 
       fig2 <- plot_ly(type = "scatter",
-                      mode = "markers",height = 200*length(myGene))%>%
+                      mode = "markers",height = 200*length(input$violinInputGene))%>%
         layout(xaxis=list(visible="FALSE",
                           color="rgba(0,0,0,0)",
                           tickfont =list(color="rgba(0,0,0,0)"),
