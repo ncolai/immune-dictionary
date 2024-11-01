@@ -20,7 +20,8 @@ source('sourceFiles/irea-gene-matrix-tab.R', local = TRUE)
 source('sourceFiles/irea-network-tab.R', local = TRUE)
 
 
-cellList <- c(" ", readLines("sourceFiles/lig_seurat_data.txt"))
+cellListIreaList <- c(" ", readLines("sourceFiles/lig_seurat_listcells.txt"))
+cellListIreaMatrix <- c(" ", readLines("sourceFiles/lig_seurat_matrixcells.txt"))
 
 css <- "
 .busy { 
@@ -80,7 +81,7 @@ output$pageStub <- renderUI(fluidPage(
                            #           accept = c(".txt", ".xlsx", ".xls")),
                            HTML("<br>"),
                            HTML("<br>"),
-                           selectInput("inputCell", "Choose Cell Type", cellList),
+                           selectInput("inputCell", "Choose Cell Type", cellListIreaList),
                            div(style='overflow-x: auto;',
                                radioGroupButtons(inputId = "speciesInput", label = "Species", choices = c("Mouse", "Human"), justified = TRUE)),
                            HTML('<hr>'),
@@ -143,7 +144,7 @@ output$pageStub <- renderUI(fluidPage(
                            h3(),
                            bsTooltip("info_btn2", "Please use NK Cell for example files", 
                                      placement = "right", trigger = "hover", options = NULL),
-                           selectInput("inputCell_tabB", label = tags$div(class = "header", tags$div("Choose Cell Type", tags$a(style = "margin-left:0.2em; text-decoration: none;", id = "info_btn2", 'ⓘ'))), cellList),
+                           selectInput("inputCell_tabB", label = tags$div(class = "header", tags$div("Choose Cell Type", tags$a(style = "margin-left:0.2em; text-decoration: none;", id = "info_btn2", 'ⓘ'))), cellListIreaMatrix),
                            HTML('<hr>'),
                            actionButton("dropdown_btn2", label = ' Optional Parameters', icon = icon("chevron-down"),
                                         class = "btn-link", style = 'text-decoration: none;
