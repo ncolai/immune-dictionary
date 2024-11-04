@@ -14,7 +14,7 @@ observeEvent(input$clear,{
 
 # Submit Celltype
 submit_btn_celltype <- observeEvent(input$submit_celltype,{
-  allsigs <- read.xlsx("dataFiles/SuppTable3_CytokineSignatures.xlsx")
+  allsigs <- read.xlsx("dataFiles/SuppTable3_CytokineSignatures.xlsx", input$cellType1)
   
   if (input$cellType1 == " ") {
     showNotification('Please select a cell type.', type = 'error')

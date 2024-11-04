@@ -12,4 +12,3 @@ MigDC
 Macrophage
 Monocyte
 Neutrophil
-Mast_cell

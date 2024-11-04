@@ -97,7 +97,7 @@ output$plot <- renderPlotly({
       if (input$featureInput1 == " ") return(NULL)
       else if (input$featureInput2 == " ") return(NULL)
       else{
-        allsigs <- read.xlsx("dataFiles/SuppTable3_CytokineSignatures.xlsx")
+        allsigs <- read.xlsx("dataFiles/SuppTable3_CytokineSignatures.xlsx", input$featureInput1)
         subset_data <- subset(allsigs, Celltype_Str == input$featureInput1)
         final_data <- subset(subset_data, Cytokine == input$featureInput2)
         gene_column <- final_data %>% pull(Gene)
