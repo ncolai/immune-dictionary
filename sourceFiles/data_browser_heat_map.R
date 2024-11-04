@@ -60,7 +60,11 @@ submit_btn_celltype <- observeEvent(input$submit_celltype,{
 
 # Submit Cytokines
 submit_btn_cytokines <- observeEvent(input$submit_cytokines,{
-  allsigs <- read.xlsx("dataFiles/SuppTable3_CytokineSignatures.xlsx")
+  #allsigs <- read.xlsx("dataFiles/SuppTable3_CytokineSignatures.xlsx", "B_cell")
+  allsigs <- dplyr::bind_rows(
+    rio::import_list("dataFiles/SuppTable3_CytokineSignatures.xlsx", setclass = "tbl"),
+    .id = "sheet"
+  )
   
   if (input$cytokine1 == " ") {
     showNotification('Please select a cytokine.', type = 'error')

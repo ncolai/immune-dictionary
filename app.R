@@ -6,6 +6,7 @@ library(patchwork)
 library(googlesheets4)
 library(fst)
 library(qs)
+library(rio) #for reading multiple sheets at once
 #library(Seurat)
 library(openxlsx)
 
