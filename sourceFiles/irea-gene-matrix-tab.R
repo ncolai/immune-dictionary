@@ -93,11 +93,12 @@ genesB <- observeEvent(input$submit_compass_matrix, {
                                                           genediff_cutoff = input$genediff_cutoff, 
                                                           species = "mouse")
           cat("Got data table\n")
-          # df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
           data$irea_plot_type <- "Compass"
+          df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
           
           # OR
           # data$irea_plot_B <- IreaCompassPlot(data$table_tabB, color_by = "pval")
+          data$irea_plot_B <- IreaCompassPlot(df_irea_pd1, color_by = "pval")
           
           cat("Plot IREA\n")
         },
@@ -180,8 +181,9 @@ genesB <- observeEvent(input$submit_radar_matrix, {
                                                     input_celltype = input$inputCell_tabB, 
                                                     genediff_cutoff = input$genediff_cutoff, 
                                                     species = "mouse")
-          #df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
           data$irea_plot_type <- "Radar"
+          df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
+          data$irea_plot_B <- IreaRadarPlot(df_irea_pd1, input_celltype = input$inputCell_tabB)
         },
         error = function(e){
           showNotification('Error in calculation. Please try again with a different cell type.', duration = NULL, type = 'error')
@@ -217,21 +219,7 @@ output$table_B <- renderDataTable({
 
 plotInput_B <- function(){
   # if table data has been calculated, display plot
-  # req(data$irea_plot_B)
-  # data$irea_plot_B
-  
-  req(data$table_tabB)
-  
-  if (!is.null(input$rb)){
-    df_irea_pd1 = subset(data$table_tabB, Sample == input$rb)
-    
-    if (data$irea_plot_type == "Radar") {
-      data$irea_plot_B <- IreaRadarPlot(df_irea_pd1, input_celltype = input$inputCell_tabB)
-    }
-    else if (data$irea_plot_type == "Compass") {
-      data$irea_plot_B <- IreaCompassPlot(df_irea_pd1, color_by = "pval")
-    }
-  }
+  req(data$irea_plot_B)
   
   data$irea_plot_B
 }
