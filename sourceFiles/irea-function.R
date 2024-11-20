@@ -299,6 +299,12 @@ GeneSetEnrichmentHyperTest = function(degs, input_celltype, species = "mouse") {
   # Order the results by p-value
   df_irea = df_irea[order(df_irea$pval), ]
   
+  # Change to official cytokine name
+  cytokine_spreadsheet = read.xlsx("dataFiles/irea_cytokine_list.xlsx")
+  df_irea$Cytokine = mapvalues(df_irea$Cytokine,
+                                from = cytokine_spreadsheet$Cytokine_OriginalName,
+                                to = cytokine_spreadsheet$Cytokine_DisplayName, warn_missing = FALSE)
+  
   return(df_irea)
 }
 

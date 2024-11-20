@@ -277,7 +277,7 @@ output$download_table_B <- renderUI({
 output$downloadPDF_B <- downloadHandler(
   filename = "IREA_plot.pdf",
   content = function(file) {
-    cairo_pdf(file, 6, 6)
+    cairo_pdf(file, 7, 6)
     print(plotInput_B())
     dev.off()
   }) 
@@ -285,7 +285,7 @@ output$downloadPDF_B <- downloadHandler(
 output$downloadPNG_B <- downloadHandler(
   filename = "IREA_plot.png",
   content = function(file) {
-    png(file, width     = 6,
+    png(file, width     = 7,
         height    = 6,
         units     = "in",
         res       = 1200,
@@ -297,7 +297,7 @@ output$downloadPNG_B <- downloadHandler(
 output$downloadJPG_B <- downloadHandler(
   filename = "IREA_plot.jpg",
   content = function(file) {
-    jpeg(file, width     = 6,
+    jpeg(file, width     = 7,
          height    = 6,
          units     = "in",
          res       = 1200,
