@@ -460,8 +460,8 @@ GetEnrichmentScoreProjection = function(input_profile, input_celltype, genediff_
   # profiles_cc = aggregate(profiles_cc, by = list(rownames(profiles_cc)), mean)
   
   # Only keep the genes that have corresponding gene symbols between mouse and human
-  genes_tokeep = unique(homolog_table$GeneSymbol2)[unique(homolog_table$GeneSymbol2) %in% rownames(profiles_cc)]
-  profiles_cc = profiles_cc[genes_tokeep, ]
+  #genes_tokeep = unique(homolog_table$GeneSymbol2)[unique(homolog_table$GeneSymbol2) %in% rownames(profiles_cc)]
+  #profiles_cc = profiles_cc[genes_tokeep, ]
   # }
   
   # print(rownames(profiles_cc))

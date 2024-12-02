@@ -94,10 +94,17 @@ genesB <- observeEvent(input$submit_compass_matrix, {
                                                           species = "mouse")
           cat("Got data table\n")
           data$irea_plot_type <- "Compass"
-          df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
+          #df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
           
           # OR
-          # data$irea_plot_B <- IreaCompassPlot(data$table_tabB, color_by = "pval")
+          #data$irea_plot_B <- IreaCompassPlot(subset(data$table_tabB, Sample == input$rb), color_by = "pval")
+          #data$irea_plot_B <- IreaCompassPlot(data$table_tabB, color_by = "pval")
+          
+          if (is.null(input$rb)) {
+            df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
+          } else {
+            df_irea_pd1 = subset(data$table_tabB, Sample == input$rb)
+          }
           data$irea_plot_B <- IreaCompassPlot(df_irea_pd1, color_by = "pval")
           
           cat("Plot IREA\n")
@@ -182,7 +189,13 @@ genesB <- observeEvent(input$submit_radar_matrix, {
                                                     genediff_cutoff = input$genediff_cutoff, 
                                                     species = "mouse")
           data$irea_plot_type <- "Radar"
-          df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
+          #df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
+          #data$irea_plot_B <- IreaRadarPlot(df_irea_pd1, input_celltype = input$inputCell_tabB)
+          if (is.null(input$rb)) {
+            df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
+          } else {
+            df_irea_pd1 = subset(data$table_tabB, Sample == input$rb)
+          }
           data$irea_plot_B <- IreaRadarPlot(df_irea_pd1, input_celltype = input$inputCell_tabB)
         },
         error = function(e){
@@ -245,6 +258,16 @@ output$download_matrix <- downloadHandler(
 # observeEvent(input$matrix_file, {
 #   updateCheckboxInput(session, 'sample_matrix', value = 'FALSE')
 # })
+
+observeEvent(input$rb, { #change the graph when radio button is changed
+  if (data$irea_plot_type == "Radar") {
+    df_irea_pd1 = subset(data$table_tabB, Sample == input$rb)
+    data$irea_plot_B <- IreaRadarPlot(df_irea_pd1, input_celltype = input$inputCell_tabB)
+  } else if (data$irea_plot_type == "Compass") {
+    df_irea_pd1 = subset(data$table_tabB, Sample == input$rb)
+    data$irea_plot_B <- IreaCompassPlot(df_irea_pd1, color_by = "pval")
+  }
+})
 
 observeEvent(input$sample_matrix, {
   # session$sendCustomMessage("upload_txt", "SOME OTHER TEXT")
