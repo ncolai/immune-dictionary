@@ -17,11 +17,14 @@ observeEvent(input$umap_submit, {
     input_celltype = input$umap_featureInput1
     if (is.null(lig_seurat[[input_celltype]])){
       print('loading data')
-      file_name = paste0("dataFiles/celltypeSmallUmap/",input$umap_featureInput1,".qs")
+      #file_name = paste0("dataFiles/celltypeSmallUmap/",input$umap_featureInput1,".qs")
+      file_name = paste0("dataFiles/ireaPolarizationData/",input$umap_featureInput1,".RDS")
       # file_name = paste0('dataFiles/rdata-celltype/200417-ligands-seurat-', input$umap_featureInput1, '.RData', sep = '')
-      lig_seurat[[input_celltype]] <- qread(file_name)
+      #lig_seurat[[input_celltype]] <- qread(file_name)
+      lig_seurat[[input_celltype]] <- readRDS(file_name)
       print('data loaded')
-      metadata_cc = cbind(lig_seurat[[input_celltype]]@meta.data, lig_seurat[[input_celltype]]@reductions$umap@cell.embeddings)
+      #metadata_cc = cbind(lig_seurat[[input_celltype]]@meta.data, lig_seurat[[input_celltype]]@reductions$umap@cell.embeddings)
+      metadata_cc = cbind(lig_seurat[[input_celltype]]$Metadata, lig_seurat[[input_celltype]]$Reductions) #only UMAP is stored in stripped version
       
     }
     
