@@ -27,7 +27,7 @@ ui <- fluidPage(
 
 if (!exists('example_plots')){
   cat('Loading data\n')
-  example_plots <- qread("dataFiles/example_plots.qs")
+  example_plots <- qread("dataFiles/example_plots_updated.qs")
   cat('Loaded data')
 }
 

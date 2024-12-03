@@ -89,10 +89,12 @@ observeEvent(input$umap_submit, {
       #   scale_y_continuous(expand=c(0,0)) +
       #   labs(x = NULL, y = NULL)
       
-      umap_coordinates <- lig_seurat[[input_celltype]]@reductions$umap@cell.embeddings
+      #umap_coordinates <- lig_seurat[[input_celltype]]@reductions$umap@cell.embeddings
+      umap_coordinates <- lig_seurat[[input_celltype]]$Reductions
       
       # Extract gene expression data
-      expression_matrix <- lig_seurat[[input_celltype]]@assays[["RNA"]]@data
+      #expression_matrix <- lig_seurat[[input_celltype]]@assays[["RNA"]]@data
+      expression_matrix <- lig_seurat[[input_celltype]]$RNA_data
       if (input$umap_gene_input %in% rownames(expression_matrix)) {
         gene_expression <- expression_matrix[input$umap_gene_input, ]
       } else {
