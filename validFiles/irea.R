@@ -158,7 +158,7 @@ output$pageStub <- renderUI(fluidPage(
                   text-align: left;'),
                            HTML('<br><br>'),
                            hidden(numericInput("genediff_cutoff", "Gene Diff Cutoff", 0.25, min = 0, max = 1, step = 0.05)),
-                           #  hidden(radioGroupButtons(inputId = "speciesInputB", label = "Species", choices = c("Mouse", "Human"), justified = TRUE)),
+                           hidden(radioGroupButtons(inputId = "speciesInputB", label = "Species", choices = c("Mouse", "Human"), justified = TRUE)),
                            HTML("<hr>"),
                            HTML("<br>"),
                            h3("Submit"),
@@ -518,13 +518,13 @@ valid_genes <- function(gene_list, species = "mouse") {
       }
     }
     if (length(not_working_genes) == length(gene_list)){
-      return('invalid')
+      return(c('invalid'))
     }
     else if (length(not_working_genes) > 0){
       return(not_working_genes)
     }
     else{
-      return('valid')
+      return(c('valid'))
     }
   } else {
     for (gene in gene_list){
@@ -536,13 +536,13 @@ valid_genes <- function(gene_list, species = "mouse") {
       }
     }
     if (length(not_working_genes) == length(gene_list)){
-      return('invalid')
+      return(c('invalid')) #return a list for consistency
     }
     else if (length(not_working_genes) > 0){
       return(not_working_genes)
     }
     else{
-      return('valid')
+      return(c('valid')) #return a list for consistency
     }
   }
 }

@@ -30,7 +30,7 @@ observeEvent(input$submit_radar_matrix, {
 observeEvent(input$dropdown_btn2,{
   # hide/show optional parameters on click
   toggle('genediff_cutoff')
-  #toggle('speciesInputB')
+  toggle('speciesInputB')
 })
 
 
@@ -70,10 +70,9 @@ genesB <- observeEvent(input$submit_compass_matrix, {
     }
     else{
       # check if genes are valid
-      # Parameter removed: ", species = tolower(input$speciesInput)"
-      is_valid <- valid_genes(rownames(data$input_profile))
+      is_valid <- valid_genes(rownames(data$input_profile), species = tolower(input$speciesInputB))
       
-      if (is_valid == 'invalid'){
+      if (is_valid[1] == 'invalid'){
         showNotification('Please submit valid genes in the first column.', duration = NULL, type = 'error')
         data$input_profile <- NULL
         data$table_tabB = NULL
@@ -81,7 +80,7 @@ genesB <- observeEvent(input$submit_compass_matrix, {
       }
       else {
         # if there are invalid genes, show error message
-        if (is_valid != 'valid'){
+        if (is_valid[1] != 'valid'){
           showNotification(HTML(paste0('The following genes were not found:', '<br>', paste(is_valid, collapse = ', '), '<br>', 'The calculation will proceed without these genes.', '<br><br>', 'Example mouse genes: Isg15, Irf7, Ncr1', '<br>', 'Example human genes: ISG15, IRF7, NCR1')), duration = 10, type = 'error')
         }
         cat('Calculating Gene Matrix Enrichment Score...\n')
@@ -91,7 +90,7 @@ genesB <- observeEvent(input$submit_compass_matrix, {
           data$table_tabB <- GetEnrichmentScoreProjection(input_profile = data$input_profile, 
                                                           input_celltype = input$inputCell_tabB, 
                                                           genediff_cutoff = input$genediff_cutoff, 
-                                                          species = "mouse")
+                                                          species = tolower(input$speciesInputB))
           cat("Got data table\n")
           data$irea_plot_type <- "Compass"
           #df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
@@ -166,10 +165,9 @@ genesB <- observeEvent(input$submit_radar_matrix, {
     }
     else{
       # check if genes are valid
-      # Removed parameter: ", species = tolower(input$speciesInput)"
-      is_valid <- valid_genes(rownames(data$input_profile))
+      is_valid <- valid_genes(rownames(data$input_profile), species = tolower(input$speciesInputB))
       
-      if (is_valid == 'invalid'){
+      if (is_valid[1] == 'invalid'){
         showNotification('Please submit valid genes in the first column.', duration = NULL, type = 'error')
         data$input_profile <- NULL
         data$table_tabB = NULL
@@ -177,7 +175,7 @@ genesB <- observeEvent(input$submit_radar_matrix, {
       }
       else {
         # if there are invalid genes, show error message
-        if (is_valid != 'valid'){
+        if (is_valid[1] != 'valid'){
           showNotification(HTML(paste0('The following genes were not found:', '<br>', paste(is_valid, collapse = ', '), '<br>', 'The calculation will proceed without these genes.', '<br><br>', 'Example mouse genes: Isg15, Irf7, Ncr1', '<br>', 'Example human genes: ISG15, IRF7, NCR1')), duration = 10, type = 'error')
         }
         
@@ -187,7 +185,7 @@ genesB <- observeEvent(input$submit_radar_matrix, {
           data$table_tabB <- PolarizationProjection(input_profile = data$input_profile, 
                                                     input_celltype = input$inputCell_tabB, 
                                                     genediff_cutoff = input$genediff_cutoff, 
-                                                    species = "mouse")
+                                                    species = tolower(input$speciesInputB))
           data$irea_plot_type <- "Radar"
           #df_irea_pd1 = subset(data$table_tabB, Sample == colnames(data$input_profile)[1])
           #data$irea_plot_B <- IreaRadarPlot(df_irea_pd1, input_celltype = input$inputCell_tabB)

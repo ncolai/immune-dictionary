@@ -425,11 +425,29 @@ GetEnrichmentScoreProjection = function(input_profile, input_celltype, genediff_
   
   #profiles_cc = as.matrix(lig_seurat_sub@assays[['RNA']]@data)
   profiles_cc = as.matrix(lig_seurat_sub$RNA_data)
+  #added section to account for human stuff
+  if (species == "human") {
+    # TODO: can actually save these datasets in RDS as human references to speed up
+    homolog_table = readRDS("dataFiles/ref_homolog_table.RData")
+    rownames(profiles_cc) = mapvalues(rownames(profiles_cc),
+                                      from = homolog_table$GeneSymbol1,
+                                      to = homolog_table$GeneSymbol2, warn_missing = FALSE)
+    
+    # For duplciated entries, take the first entry
+    profiles_cc = profiles_cc[!duplicated(rownames(profiles_cc)), ]
+    # Alternative: If there are duplicated entries, take the mean of duplicated entries
+    #profiles_cc = aggregate(profiles_cc, by = list(rownames(profiles_cc)), mean)
+    
+    # Only keep the genes that have corresponding gene symbols between mouse and human
+    genes_tokeep = unique(homolog_table$GeneSymbol2)[unique(homolog_table$GeneSymbol2) %in% rownames(profiles_cc)]
+    profiles_cc = profiles_cc[genes_tokeep, ]
+  }
   print(profiles_cc)
   #metadata_cc = lig_seurat_sub@meta.data
   metadata_cc = lig_seurat_sub$Metadata
   print(metadata_cc)
   print("cc loaded")
+  
   
   homolog_table = readRDS("dataFiles/ref_homolog_table.RData")
   rownames(profiles_cc) = mapvalues(rownames(profiles_cc),
