@@ -29,7 +29,7 @@ IreaAll = function(input_profile, genediff_cutoff = 0.25, species = "mouse",
       colnames(input_profile_ss_cc_reltoctrl) = gsub("__.*$", "", colnames(input_profile_ss_cc_reltoctrl))
 
       df_irea_ss_cc = GetEnrichmentScoreProjection(input_profile_ss_cc_reltoctrl,
-                                                   input_celltype = cc, genediff_cutoff = genediff_cutoff)
+                                                   input_celltype = cc, genediff_cutoff = genediff_cutoff, species=species)
       df_irea_ss_cc = AddReceptorExpression(df_irea = df_irea_ss_cc,
                                             input_profile = input_profile_ss_cc, threshold = threshold_receptor, species = species)
       df_irea_ss_cc = AddLigandExpression(df_irea = df_irea_ss_cc,
