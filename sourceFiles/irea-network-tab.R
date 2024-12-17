@@ -82,7 +82,8 @@ genesC <- observeEvent(input$submit_cytokine_network, {
             cat('Calculating Cytokine Network Analysis...\n')
             tryCatch({
               cat("Input Cytokine Network\n")
-              df_irea_all <- IreaAll(data$input_profile_C, species = "mouse", threshold_receptor = 0.05, threshold_ligand = 0.05, celltypes = cells_to_analyze)
+              #df_irea_all <- IreaAll(data$input_profile_C, species = "mouse", threshold_receptor = 0.05, threshold_ligand = 0.05, celltypes = cells_to_analyze)
+              df_irea_all <- IreaAll(data$input_profile_C, species = input$speciesInputC, threshold_receptor = 0.05, threshold_ligand = 0.05, celltypes = cells_to_analyze)
               df_irea_network <- IreaNetwork(df_irea_all, require_receptor_expression = TRUE)
               df_irea_network_pos <- subset(df_irea_network, ES > 0)
               if (nrow(df_irea_network_pos) == 0) {
@@ -153,7 +154,7 @@ genesC <- observeEvent(input$submit_cytokine_network, {
             cat('Calculating Cytokine Network Analysis...\n')
             tryCatch({
               cat("Input Cytokine Network\n")
-              df_irea_all <- IreaAll(data$input_profile_C, species = "mouse", threshold_receptor = 0.05, threshold_ligand = 0.05, celltypes = cells_to_analyze)
+              df_irea_all <- IreaAll(data$input_profile_C, species = input$speciesInputC, threshold_receptor = 0.05, threshold_ligand = 0.05, celltypes = cells_to_analyze)
               df_irea_network <- IreaNetwork(df_irea_all, require_receptor_expression = TRUE)
               df_irea_network_pos <- subset(df_irea_network, ES > 0)
               if (nrow(df_irea_network_pos) == 0) {
