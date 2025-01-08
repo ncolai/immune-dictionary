@@ -6,6 +6,7 @@
 #'
 #' @param    degs              A list of differentially expresssed genes that user would like to investigate
 #' @param    input_celltype    Choose from one of the listed cell types that most resembles the input
+#' @param    species           Animal species to analyze (mouse/human)
 #'
 #' @export
 
@@ -20,12 +21,6 @@ GeneSetEnrichmentScore = function(degs, input_celltype, species = "mouse") {
   if (input_celltype %notin% celltypes) stop(paste0("cell type must be one of the following: ", paste0(celltypes, collapse = ", ")))
   
   # Load reference data
-  ## TODO: to speed up, can save each cell type into a different Rds file
-  ## TODO: to speed up, subset the gene list to only include the genes that are >0.01 (or other threshold) between cytokine and PBS
-  #lig_seurat = readRDS("dataFiles/lig_seurat.Rda")
-  #lig_seurat = subset(lig_seurat, celltype == input_celltype)
-  
-  #TODO: fix all references here to align with Lawrence's changes
   lig_seurat = readRDS(paste0("dataFiles/ireaData/", input_celltype, ".RDS"))
   
   # Change to official cytokine name
@@ -39,13 +34,11 @@ GeneSetEnrichmentScore = function(degs, input_celltype, species = "mouse") {
                                     to = cytokine_spreadsheet$Cytokine_DisplayName, 
                                     warn_missing = FALSE)
   
-  #cytokines = setdiff(sort(unique(lig_seurat@meta.data$sample)), "PBS")
-  #profiles_cc = as.matrix(lig_seurat@assays[['RNA']]@data)
   cytokines = setdiff(sort(unique(lig_seurat$Metadata$sample)), "PBS")
   profiles_cc = as.matrix(lig_seurat$RNA_data)
   
-  if (species == "human") {
-    # TODO: can actually save these datasets in RDS as human references to speed up
+  if (tolower(species) == "human") {
+    # Load human references
     homolog_table = readRDS("dataFiles/ref_homolog_table.RData")
     rownames(profiles_cc) = mapvalues(rownames(profiles_cc),
                                       from = homolog_table$GeneSymbol1,
@@ -53,8 +46,6 @@ GeneSetEnrichmentScore = function(degs, input_celltype, species = "mouse") {
     
     # For duplciated entries, take the first entry
     profiles_cc = profiles_cc[!duplicated(rownames(profiles_cc)), ]
-    # Alternative: If there are duplicated entries, take the mean of duplicated entries
-    #profiles_cc = aggregate(profiles_cc, by = list(rownames(profiles_cc)), mean)
     
     # Only keep the genes that have corresponding gene symbols between mouse and human
     genes_tokeep = unique(homolog_table$GeneSymbol2)[unique(homolog_table$GeneSymbol2) %in% rownames(profiles_cc)]
@@ -66,7 +57,6 @@ GeneSetEnrichmentScore = function(degs, input_celltype, species = "mouse") {
   profiles_cc_genes = profiles_cc[degs_to_include, ]
   
   # Calculate enrichment scores
-  #scores_tmp = aggregate(t(profiles_cc_genes), by = list(lig_seurat@meta.data$sample), mean)
   scores_tmp = aggregate(t(profiles_cc_genes), by = list(lig_seurat$Metadata$sample), mean)
   rownames(scores_tmp) = scores_tmp$Group.1
   scores_tmp$Group.1 = NULL
@@ -79,8 +69,6 @@ GeneSetEnrichmentScore = function(degs, input_celltype, species = "mouse") {
   # Assess the significance of enrichment using the Wilcoxon rank sum test between gene set scores on cytokine treated cells
   # and gene set scores on PBS treated cells
   scores_pvals = sapply(cytokines, function(x){
-    #test_res = wilcox.test(apply(profiles_cc_genes[, rownames(subset(lig_seurat@meta.data, sample == x))], 2, sum),
-                           #apply(profiles_cc_genes[, rownames(subset(lig_seurat@meta.data, sample == "PBS"))], 2, sum));
     test_res = wilcox.test(apply(profiles_cc_genes[, rownames(subset(lig_seurat$Metadata, sample == x))], 2, sum),
                            apply(profiles_cc_genes[, rownames(subset(lig_seurat$Metadata, sample == "PBS"))], 2, sum));
     return(test_res$p.value)
@@ -98,14 +86,6 @@ GeneSetEnrichmentScore = function(degs, input_celltype, species = "mouse") {
   df_irea$Cytokine = factor(df_irea$Cytokine, levels = df_irea$Cytokine[order(df_irea$nlog10_padj)])
   df_irea$Celltype = input_celltype
   
-  # ggplot(df_irea, aes(x = Cytokine, y = nlog10_padj)) +
-  #   geom_hline(yintercept = 2, color = "blue", linetype = 'dotted') +
-  #   geom_bar(stat = "identity", fill = "orange") +
-  #   coord_flip() +
-  #   theme_classic() +
-  #   xlab("Cytokine response") +
-  #   ylab("IREA-GeneSet -log10 (FDR)")
-  
   return(df_irea)
   
 }
@@ -116,6 +96,7 @@ GeneSetEnrichmentScore = function(degs, input_celltype, species = "mouse") {
 #'
 #' @param    degs              A list of differentially expresssed genes that user would like to investigate
 #' @param    input_celltype    Choose from one of the listed cell types that most resembles the input
+#' @param    species           Animal species to analyze (mouse/human)
 #'
 #' @export
 
@@ -131,27 +112,15 @@ PolarizationGeneSetEnrichmentScore = function(degs, input_celltype, species = "m
   
   
   # Load reference data
+  filename_cc = paste0("dataFiles/ireaPolarizationData/", input_celltype, ".RDS")
   
-  # lig_seurat <- readRDS(paste0("dataFiles/celltype/200417-ligands-alldata-seurat-p3-",
-  #                       input_celltype,".rds"))
+  lig_seurat <- readRDS(filename_cc)
   
+  profiles_cc = lig_seurat$RNA_data
+  metadata_cc = cbind(lig_seurat$Metadata, lig_seurat$Reductions)
   
-  filename_cc = paste0("dataFiles/rdata-celltype/200417-ligands-seurat-",
-                       input_celltype,".RData")
-  load(filename_cc)
-  profiles_cc = as.matrix(lig_seurat@assays[['RNA']]@data)
-  metadata_cc = cbind(lig_seurat@meta.data, lig_seurat@reductions$umap@cell.embeddings)
-  
-  # run it somewhere else and save the data
-  # save(profiles_cc, metadata_cc, file = paste0("~desktop/server/shinyproxy-app/webcode/dataFiles/newCelltype/celltype_obj_", input_celltype, ".RData"))
-  # run it in this function: 
-  # load(paste0("dataFiles/newCelltype/celltype_obj_", input_celltype, ".RData"))
-  # profiles_cc = get(paste0("profiles_cc_", input_celltype))
-  # metadata_cc = get(paste0("metadata_cc_", input_celltype))
-  
-  # TODO: is there a better way to translate gene names from mouse to human?
-  if (species == "human") {
-    # TODO: can actually save these datasets in RDS as human references to speed up
+  # load reference human data
+  if (tolower(species) == "human") {
     homolog_table = readRDS("dataFiles/ref_homolog_table.RData")
     rownames(profiles_cc) = mapvalues(rownames(profiles_cc),
                                       from = homolog_table$GeneSymbol1,
@@ -159,8 +128,6 @@ PolarizationGeneSetEnrichmentScore = function(degs, input_celltype, species = "m
     
     # For duplciated entries, take the first entry
     profiles_cc = profiles_cc[!duplicated(rownames(profiles_cc)), ]
-    # Alternative: If there are duplicated entries, take the mean of duplicated entries
-    #profiles_cc = aggregate(profiles_cc, by = list(rownames(profiles_cc)), mean)
     
     # Only keep the genes that have corresponding gene symbols between mouse and human
     genes_tokeep = unique(homolog_table$GeneSymbol2)[unique(homolog_table$GeneSymbol2) %in% rownames(profiles_cc)]
@@ -225,12 +192,6 @@ PolarizationGeneSetEnrichmentScore = function(degs, input_celltype, species = "m
   
 }
 
-
-
-
-
-
-
 #### Immune response enrichment analysis functions #####
 
 #' IREA analysis for gene set input - Fisher's test method
@@ -240,6 +201,7 @@ PolarizationGeneSetEnrichmentScore = function(degs, input_celltype, species = "m
 #'
 #' @param    degs              A list of differentially expresssed genes that user would like to investigate
 #' @param    input_celltype    Choose from one of the listed cell types that most resemble the input
+#' @param    species           Animal species to analyze (mouse/human)
 #'
 #' @export
 
@@ -258,7 +220,6 @@ GeneSetEnrichmentHyperTest = function(degs, input_celltype, species = "mouse") {
   ref_expressed_genes = readRDS("dataFiles/ref_expressed_genes_per_celltype.Rda")
   ref_expressed_genes_celltype = subset(ref_expressed_genes, celltype == input_celltype)
   
-  # TODO: load the hyper test and add the ability to study human genes using similar approach as in the "GetEnrichmentScoreProjection" method
   # subset into the celltype of interest
   samples = setdiff(read.xlsx("dataFiles/irea_cytokine_list.xlsx")$Cytokine_OriginalName,
                     c("IL2+IL15", "IL2+IFNg"))
@@ -319,6 +280,7 @@ GeneSetEnrichmentHyperTest = function(degs, input_celltype, species = "mouse") {
 #'
 #' @param    degs              A list of differentially expresssed genes that user would like to investigate
 #' @param    input_celltype    Choose from one of the listed cell types that most resemble the input
+#' @param    species           Animal species to analyze (mouse/human)
 #'
 #' @export
 
@@ -344,7 +306,6 @@ PolarizationGeneSetEnrichmentHyperTest = function(degs, input_celltype, species 
   ref_expressed_genes = readRDS("dataFiles/ref_expressed_genes_per_celltype.Rda")
   ref_expressed_genes_celltype = subset(ref_expressed_genes, celltype == input_celltype)
   
-  # TODO: load the hyper test and add the ability to study human genes using similar approach as in the "GetEnrichmentScoreProjection" method
   # subset into the celltype of interest
   polarization_states = sort(unique(ref_deg_sig_celltype$Polarization))
   
@@ -396,6 +357,7 @@ PolarizationGeneSetEnrichmentHyperTest = function(degs, input_celltype, species 
 #' @param    input_celltype    Choose from one of the listed cell types that most resemble the input
 #' @param    genediff_cutoff   Only include the genes that are differentially expressed above this threshold
 #' between cytokine-treated samples and PBS samples to speed up computation
+#' @param    species           Animal species to analyze (mouse/human)
 #' @export
 GetEnrichmentScoreProjection = function(input_profile, input_celltype, genediff_cutoff = 0.25, species = "mouse") {
   library(openxlsx)
@@ -404,9 +366,7 @@ GetEnrichmentScoreProjection = function(input_profile, input_celltype, genediff_
   `%notin%` = Negate(`%in%`)
   celltypes = c("ILC", readLines("sourceFiles/lig_seurat_data.txt"))
   
-  #lig_seurat = readRDS("dataFiles/lig_seurat.Rda")
-  #lig_seurat_sub = subset(lig_seurat, celltype == input_celltype)
-  
+  # Load reference data
   lig_seurat_sub = readRDS(paste0("dataFiles/ireaData/", input_celltype, ".RDS"))
   
   # Change to official cytokine name
@@ -423,27 +383,23 @@ GetEnrichmentScoreProjection = function(input_profile, input_celltype, genediff_
   print("files mapped")
   print(head(lig_seurat_sub$sample))
   
-  #profiles_cc = as.matrix(lig_seurat_sub@assays[['RNA']]@data)
   profiles_cc = as.matrix(lig_seurat_sub$RNA_data)
   #added section to account for human stuff
-  if (species == "human") {
-    # TODO: can actually save these datasets in RDS as human references to speed up
+  if (tolower(species) == "human") {
+    #Load human reference data
     homolog_table = readRDS("dataFiles/ref_homolog_table.RData")
     rownames(profiles_cc) = mapvalues(rownames(profiles_cc),
                                       from = homolog_table$GeneSymbol1,
                                       to = homolog_table$GeneSymbol2, warn_missing = FALSE)
     
-    # For duplciated entries, take the first entry
+    # For duplicated entries, take the first entry
     profiles_cc = profiles_cc[!duplicated(rownames(profiles_cc)), ]
-    # Alternative: If there are duplicated entries, take the mean of duplicated entries
-    #profiles_cc = aggregate(profiles_cc, by = list(rownames(profiles_cc)), mean)
     
     # Only keep the genes that have corresponding gene symbols between mouse and human
     genes_tokeep = unique(homolog_table$GeneSymbol2)[unique(homolog_table$GeneSymbol2) %in% rownames(profiles_cc)]
     profiles_cc = profiles_cc[genes_tokeep, ]
   }
   print(profiles_cc)
-  #metadata_cc = lig_seurat_sub@meta.data
   metadata_cc = lig_seurat_sub$Metadata
   print(metadata_cc)
   print("cc loaded")
@@ -471,19 +427,6 @@ GetEnrichmentScoreProjection = function(input_profile, input_celltype, genediff_
   rownames(input_profile) = mapvalues(rownames(input_profile),
                                            from = homolog_table$GeneSymbol1,
                                            to = homolog_table$GeneSymbol2, warn_missing = FALSE)
-  
-  # rownames(data$input_profile)
-  
-  # Alternative: If there are duplicated entries, take the mean of duplicated entries
-  # profiles_cc = aggregate(profiles_cc, by = list(rownames(profiles_cc)), mean)
-  
-  # Only keep the genes that have corresponding gene symbols between mouse and human
-  #genes_tokeep = unique(homolog_table$GeneSymbol2)[unique(homolog_table$GeneSymbol2) %in% rownames(profiles_cc)]
-  #profiles_cc = profiles_cc[genes_tokeep, ]
-  # }
-  
-  # print(rownames(profiles_cc))
-  # print(rownames(data$input_profile)) # cPITALIZATION ISSUE
   
   # Choose intersection genes
   genes_common = intersect(rownames(input_profile), rownames(profiles_cc))
@@ -515,7 +458,6 @@ GetEnrichmentScoreProjection = function(input_profile, input_celltype, genediff_
   # Project all input vectors onto the reference panel using the cosine similarity metric
   library(philentropy)
   library(reshape2)
-  #projection_scores_raw = distance(t(dist_input_mat), method = "cosine")
   
   coss <- function(x) {crossprod(x)/(sqrt(tcrossprod(colSums(x^2))))} # implement cosine distance using cross product function
   
@@ -569,9 +511,7 @@ GetEnrichmentScoreProjection = function(input_profile, input_celltype, genediff_
   print("es2")
   # Perform multiple hypothesis testing correction
   df_irea$padj = p.adjust(df_irea$pval, method = "fdr")
-  #Why is this line frozen?
   df_irea$Celltype = input_celltype
-  #df_irea$Celltype = "B_cell"
   print("es3")
   # Fill missing data with "not-enriched"
   df_irea$padj[is.na(df_irea$padj)] = 1
@@ -600,8 +540,8 @@ GetEnrichmentScoreProjection = function(input_profile, input_celltype, genediff_
 #' @param    input_celltype    Choose from one of the listed cell types that most resemble the input
 #' @param    genediff_cutoff   Only include the genes that are differentially expressed above this threshold
 #' between cytokine-treated samples and PBS samples to speed up computation
+#' @param    species           Animal species to analyze (mouse/human)
 #' @export
-
 
 PolarizationProjection = function(input_profile, input_celltype, genediff_cutoff = 0.25, species = "mouse") {
   set.seed(0)
@@ -615,14 +555,15 @@ PolarizationProjection = function(input_profile, input_celltype, genediff_cutoff
   
   
   # Load reference data
-  filename_cc = paste0("dataFiles/rdata-celltype/200417-ligands-seurat-",
-                       input_celltype,".RData")
-  load(filename_cc)
-  profiles_cc = as.matrix(lig_seurat@assays[['RNA']]@data)
-  metadata_cc = cbind(lig_seurat@meta.data, lig_seurat@reductions$umap@cell.embeddings)
   
-  if (species == "human") {
-    # TODO: can actually save these datasets in RDS as human references to speed up
+  filename_cc = paste0("dataFiles/ireaPolarizationData/", input_celltype, ".RDS")
+  
+  lig_seurat <- readRDS(filename_cc)
+  profiles_cc = lig_seurat$RNA_data
+  metadata_cc = cbind(lig_seurat$Metadata, lig_seurat$Reductions)
+  
+  #load reference human data
+  if (tolower(species) == "human") {
     homolog_table = readRDS("dataFiles/ref_homolog_table.RData")
     rownames(profiles_cc) = mapvalues(rownames(profiles_cc),
                                       from = homolog_table$GeneSymbol1,
@@ -630,8 +571,6 @@ PolarizationProjection = function(input_profile, input_celltype, genediff_cutoff
     
     # For duplciated entries, take the first entry
     profiles_cc = profiles_cc[!duplicated(rownames(profiles_cc)), ]
-    # Alternative: If there are duplicated entries, take the mean of duplicated entries
-    #profiles_cc = aggregate(profiles_cc, by = list(rownames(profiles_cc)), mean)
     
     # Only keep the genes that have corresponding gene symbols between mouse and human
     genes_tokeep = unique(homolog_table$GeneSymbol2)[unique(homolog_table$GeneSymbol2) %in% rownames(profiles_cc)]
@@ -663,8 +602,6 @@ PolarizationProjection = function(input_profile, input_celltype, genediff_cutoff
   profile_cc_pbs = profiles_cc[, rownames(subset(metadata_cc, sample == "PBS"))]
   profile_cc_pbs_agg = apply(profile_cc_pbs, 1, mean)
   
-  
-  # TODO: maybe can save the gene_diff to speed up
   # For a gene to be considered different enough from cytokine treatment and control,
   # at least one treatment condition needs to be different from PBS by a certain threshold
   gene_diff = apply(rbind(profiles_cc_agg, PBS = profile_cc_pbs_agg), 2, function(x){max(x-x["PBS"])})
@@ -677,8 +614,6 @@ PolarizationProjection = function(input_profile, input_celltype, genediff_cutoff
   dist_input_mat = cbind(input_profile, profiles_cc)
   
   # Project all input vectors onto the reference panel using the cosine similarity metric
-  #library(philentropy)
-  #projection_scores_raw = distance(t(dist_input_mat), method = "cosine")
   coss <- function(x) {crossprod(x)/(sqrt(tcrossprod(colSums(x^2))))} # implement cosine distance using cross product function
   
   projection_scores_raw = coss(dist_input_mat)
@@ -691,7 +626,6 @@ PolarizationProjection = function(input_profile, input_celltype, genediff_cutoff
   # Format the results matrix
   input_samples = colnames(input_profile)
   print(input_samples)
-  #print("Now ref sample", reference_samples) # dont need it really
   mat_pval = matrix(NA, length(input_samples), length(reference_samples),
                     dimnames = list(input_samples, reference_samples))
   df_irea = reshape2::melt(mat_pval)
@@ -729,17 +663,23 @@ PolarizationProjection = function(input_profile, input_celltype, genediff_cutoff
   return(df_irea)
 }
 
-
-
-
-# Add to the df_irea whether the cytokine genes are expressed in the specific cell type in the specific sample
+#' Create ligand expression column
+#'
+#' \code{AddLigandExpression} Add to the df_irea whether the cytokine ligand 
+#' are expressed in the specific cell type in the specific sample
+#'
+#' @param    input_profile     Gene expression matrix
+#' @param    df_irea           IREA dataset to append to
+#' @param    threshold         Cutoff to determine expression
+#' @param    species           Animal species to analyze (mouse/human)
+#' @export
 AddLigandExpression = function(input_profile, df_irea, threshold = 0.05, species = "mouse") {
   
   cytokine_receptor_map = read.xlsx("dataFiles/Fig4a-ExtFig22-gene-protein-map.xlsx")
   cytokine_protein_list = unique(df_irea$Cytokine)
   cytokine_protein_list = cytokine_protein_list[!is.na(cytokine_protein_list)]
   
-  if (species == "human") {
+  if (tolower(species) == "human") {
     ligandgene_colname = "Human.gene.symbol"
   } else {
     ligandgene_colname = "Mouse.gene.symbol"
@@ -766,24 +706,27 @@ AddLigandExpression = function(input_profile, df_irea, threshold = 0.05, species
     
   }
   
-  # df_irea_tmp = df_irea[, c("Cytokine", "LigandExpressed")]
-  # df_irea_tmp = df_irea_tmp[!duplicated(df_irea_tmp), ]
-  
   return(df_irea)
   
 }
 
-
-
-
-
+#' Create receptor expression column
+#'
+#' \code{AddReceptorExpression} Add to the df_irea whether the cytokine receptor 
+#' are expressed in the specific cell type in the specific sample
+#'
+#' @param    input_profile     Gene expression matrix
+#' @param    df_irea           IREA dataset to append to
+#' @param    threshold         Cutoff to determine expression
+#' @param    species           Animal species to analyze (mouse/human)
+#' @export
 AddReceptorExpression = function(input_profile, df_irea, threshold = 0.1, species = "mouse") {
   
   cytokine_receptor_map = read.xlsx("dataFiles/Fig4a-ExtFig22-gene-protein-map.xlsx")
   cytokine_protein_list = unique(df_irea$Cytokine)
   cytokine_protein_list = cytokine_protein_list[!is.na(cytokine_protein_list)]
   
-  if (species == "human") {
+  if (tolower(species) == "human") {
     receptor_colname = "Human.main.receptor.gene(s)[Note.1]"
   } else {
     receptor_colname = "Mouse.main.receptor.gene(s)[Note.1]"
@@ -811,16 +754,20 @@ AddReceptorExpression = function(input_profile, df_irea, threshold = 0.1, specie
     
   }
   
-  # df_irea_tmp = df_irea[, c("Cytokine", "ReceptorExpressed")]
-  # df_irea_tmp = df_irea_tmp[!duplicated(df_irea_tmp), ]
-  
   return(df_irea)
 }
 
-
-
-
-# Get the top genes responsible for the enrichment for the projection method
+#' Extract top genes
+#'
+#' \code{GetTopGenes} Get the top genes responsible for the 
+#' enrichment for the projection method
+#'
+#' @param    input_profile     Gene expression matrix
+#' @param    input_celltype    Choose from one of the listed cell types that most resembles the input
+#' @param    cytokine          Specific cytokine to find top genes for
+#' @param    genediff_cutoff   Only include the genes that are differentially expressed above this threshold
+#' @param    species           Animal species to analyze (mouse/human)
+#' @export
 GetTopGenes = function(input_profile, input_celltype, cytokine = "IL12", genediff_cutoff = 0.25, species = "mouse") {
   set.seed(0)
   library(plyr)
@@ -833,26 +780,14 @@ GetTopGenes = function(input_profile, input_celltype, cytokine = "IL12", genedif
   
   
   # Load reference data
-  #load("~/Dropbox (Personal)/RPackages/IREA/R/refdata.RData")
-  # lig_seurat <- readRDS(paste0("dataFiles/celltype/200417-ligands-alldata-seurat-p3-",
-  #                               input_celltype,".rds"))
+  filename_cc = paste0("dataFiles/ireaPolarizationData/", input_celltype, ".RDS")
   
-  # lig_seurat_sub = lig_seurat
-  # profiles_cc = as.matrix(lig_seurat_sub@assays[['RNA']]@data)
+  lig_seurat <- readRDS(filename_cc)
+  profiles_cc = lig_seurat$RNA_data
+  metadata_cc = cbind(lig_seurat$Metadata, lig_seurat$Reductions)
   
-  # load(paste0("dataFiles/newCelltype/celltype_obj_", input_celltype, ".RData"))
-  # profiles_cc = get(paste0("profiles_cc_", input_celltype))
-  # metadata_cc = get(paste0("metadata_cc_", input_celltype))
-  
-  filename_cc = paste0("dataFiles/rdata-celltype/200417-ligands-seurat-",
-                       input_celltype,".RData")
-  load(filename_cc)
-  profiles_cc = as.matrix(lig_seurat@assays[['RNA']]@data)
-  metadata_cc = cbind(lig_seurat@meta.data, lig_seurat@reductions$umap@cell.embeddings)
-  
-  # TODO: is there a better way to translate gene names from mouse to human?
-  if (species == "human") {
-    # TODO: can actually save these datasets in RDS as human references to speed up
+  # load human reference data
+  if (tolower(species) == "human") {
     homolog_table = readRDS("dataFiles/ref_homolog_table.RData")
     rownames(profiles_cc) = mapvalues(rownames(profiles_cc),
                                       from = homolog_table$GeneSymbol1,
@@ -891,8 +826,6 @@ GetTopGenes = function(input_profile, input_celltype, cytokine = "IL12", genedif
   profile_cc_pbs = profiles_cc[, rownames(subset(metadata_cc, sample == "PBS"))]
   profile_cc_pbs_agg = apply(profile_cc_pbs, 1, mean)
   
-  
-  # TODO: maybe can save the gene_diff to speed up
   # For a gene to be considered different enough from cytokine treatment and control,
   # at least one treatment condition needs to be different from PBS by a certain threshold
   gene_diff = apply(rbind(profiles_cc_agg, PBS = profile_cc_pbs_agg), 2, function(x){max(x-x["PBS"])})
@@ -902,6 +835,3 @@ GetTopGenes = function(input_profile, input_celltype, cytokine = "IL12", genedif
   profiles_cc = profiles_cc[genes_large_diff, ]
   input_profile = input_profile[genes_large_diff, , drop = FALSE]
 }
-
-
-

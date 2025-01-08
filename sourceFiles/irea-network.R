@@ -1,6 +1,22 @@
 
 
-# Run IREA on all samples and cell types in the data
+#' Run IREA on all samples and cell types in the data
+#'
+#' \code{IreaAll} Compute enrichment score using Wilcoxon rank-sum test
+#' and then analyze for receptor and ligand expression across all input
+#' samples and cell types
+#'
+#' @param    input_profile     Gene expression matrix
+#' @param    genediff_cutoff   Only include the genes that are differentially expressed above this threshold
+#' between cytokine-treated samples and PBS samples to speed up computation
+#' @param    species           Animal species being analyzed (mouse/human)
+#' @param    threshold_receptor Cutoff to determine whether or not receptor 
+#' should be considered expressed
+#' @param    threshold_ligand  Cutoff to determine whether or not receptor 
+#' should be considered expressed
+#' @param    celltypes         Celltypes to run on
+#'
+#' @export
 
 IreaAll = function(input_profile, genediff_cutoff = 0.25, species = "mouse",
                    threshold_receptor = 0.05,
@@ -13,7 +29,6 @@ IreaAll = function(input_profile, genediff_cutoff = 0.25, species = "mouse",
     celltypes = unique(gsub("^.*__", "", input_colnames))
   }
 
-  #celltype_spreadsheet = read.xlsx("celltype_list.xlsx")
   celltype_spreadsheet = read.xlsx("dataFiles/celltype_list.xlsx")
 
   df_irea = c()
@@ -58,10 +73,17 @@ IreaAll = function(input_profile, genediff_cutoff = 0.25, species = "mouse",
 
 
 
-# Cell-cell interaction network
-# First run IreaAll to get the IREA results on all cell types in all samples,
-# then construct this cell-cell communication network based on ligand expression, receptor expression, and
-# significant response
+#' Cell-cell interaction network
+#'
+#' \code{IreaNetwork} First run IreaAll to get the IREA results on all cell 
+#' types in all samples, then construct this cell-cell communication network 
+#' based on ligand expression, receptor expression, and significant response
+#'
+#' @param    df_irea_all       The output of IreaAll
+#' @param    require_receptor_threshold   Focus on expressed receptors only
+#' @param    sig_threshold     Significance required for analysis
+#'
+#' @export
 
 IreaNetwork = function(df_irea_all, require_receptor_expression = TRUE, sig_threshold = 0.05) {
 
