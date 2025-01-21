@@ -45,11 +45,11 @@ genes <- observeEvent(input$submit_compass_list,{
   if (input$inputGene != '' & input$inputCell != ' '){
     split_genes_vector <- split_input(input$inputGene)
     is_valid <- valid_genes(split_genes_vector, species = tolower(input$speciesInput))
-    if (is_valid == 'invalid'){
+    if (is_valid[1] == 'invalid'){
       showNotification(HTML(paste0('Please enter in valid genes.', '<br><br>', 'Example mouse genes: Isg15, Irf7, Ncr1', '<br>', 'Example human genes: ISG15, IRF7, NCR1')), type = 'error')
     }
     else {
-      if (is_valid != 'valid'){
+      if (is_valid[1] != 'valid'){
         showNotification(HTML(paste0('The following genes were not found:', '<br>', paste(is_valid, collapse = ', '), '<br>', 'The calculation will proceed without these genes.', '<br><br>', 'Example mouse genes: Isg15, Irf7, Ncr1', '<br>', 'Example human genes: ISG15, IRF7, NCR1')), type = 'error')
       }
       print(split_genes_vector)

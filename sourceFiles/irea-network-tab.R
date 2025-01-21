@@ -69,14 +69,14 @@ genesC <- observeEvent(input$submit_cytokine_network, {
           data$input_profile_C <- NULL
           showNotification(HTML('Your data file format is incorrect.<br>Please make sure the first column is genes, and the following columns only contain numbers (in the range [-1 to 1]) pertaining to the sample.'), duration = NULL, type = 'error')
         } else {
-          is_valid <- valid_genes(rownames(data$input_profile_C))
-          if (identical(is_valid, 'invalid')) {
+          is_valid <- valid_genes(rownames(data$input_profile_C), species=tolower(input$speciesInputC))
+          if (identical(is_valid[1], 'invalid')) {
             showNotification('Please submit valid genes in the first column.', duration = NULL, type = 'error')
             data$input_profile_C <- NULL
             data$table_tabC = NULL
             data$irea_plot_C = NULL
           } else {
-            if (!identical(is_valid, 'valid')) {
+            if (!identical(is_valid[1], 'valid')) {
               # handle invalid genes message if needed
             }
             cat('Calculating Cytokine Network Analysis...\n')
@@ -141,14 +141,14 @@ genesC <- observeEvent(input$submit_cytokine_network, {
           data$input_profile_C <- NULL
           showNotification(HTML('Your data file format is incorrect.<br>Please make sure the first column is genes, and the following columns only contain numbers (in the range [-1 to 1]) pertaining to the sample.'), duration = NULL, type = 'error')
         } else {
-          is_valid <- valid_genes(rownames(data$input_profile_C))
-          if (identical(is_valid, 'invalid')) {
+          is_valid <- valid_genes(rownames(data$input_profile_C), species=tolower(input$speciesInputC))
+          if (identical(is_valid[1], 'invalid')) {
             showNotification('Please submit valid genes in the first column.', duration = NULL, type = 'error')
             data$input_profile_C <- NULL
             data$table_tabC = NULL
             data$irea_plot_C = NULL
           } else {
-            if (!identical(is_valid, 'valid')) {
+            if (!identical(is_valid[1], 'valid')) {
               # handle invalid genes message if needed
             }
             cat('Calculating Cytokine Network Analysis...\n')

@@ -504,12 +504,24 @@ data <- reactiveValues(
   irea_plot_C_type = NULL)
 
 "%ni%" <- Negate("%in%")
-valid_genes <- function(gene_list, species = "mouse") {
+#valid_genes <- function(gene_list, species = "mouse") {
+valid_genes <- function(gene_list, species) {
   # check if list of genes is valid (in lig_seurat)
   not_working_genes <- vector()
   final_genes_list <- vector()
   
   if (species == "mouse") {
+    #mouse specific test: if all genes are capitalized it is extremely likely (but NOT impossible) that there is a mistake somewhere
+    has_lowercase = FALSE
+    for (gene in gene_list){
+      if (gene != toupper(gene)){
+	has_lowercase = TRUE
+        break
+      }
+    }
+    if (!has_lowercase) {
+      return(c('invalid')) #MOST LIKELY there is some mistake. 
+    }
     for (gene in gene_list){
       if (gene %ni% valid_gene_list){
         not_working_genes <- c(not_working_genes, gene)
@@ -527,8 +539,12 @@ valid_genes <- function(gene_list, species = "mouse") {
     else{
       return(c('valid'))
     }
-  } else {
+  } else if (species == "human") { 
     for (gene in gene_list){
+      #human specific test: make sure ALL genes are completely uppercase!
+      if (gene != toupper(gene)){
+	return(c('invalid')) #NO lowercase characters allowed!
+      }
       if (gene %ni% valid_gene_list_human){
         not_working_genes <- c(not_working_genes, gene)
       }
@@ -545,6 +561,8 @@ valid_genes <- function(gene_list, species = "mouse") {
     else{
       return(c('valid')) #return a list for consistency
     }
+  } else {
+    return(c('invalid')) #not a valid species choice
   }
 }
 
