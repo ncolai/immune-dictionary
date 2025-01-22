@@ -34,6 +34,12 @@ if (!exists('example_plots')){
 server <- function(input, output, session) {
   cat("Session started.\n")                               # this prints when a session starts
   onSessionEnded(function() {cat("Session ended.\n\n")})  # this prints when a session ends
+
+  #make sure we actually interrupt early once refresh button is triggered
+  observeEvent(input$refresh, {
+    session$reload() 
+    return() #require reload
+  })
   
   # build menu; same on all pages
   output$uiStub <- renderUI({

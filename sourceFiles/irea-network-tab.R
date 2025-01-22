@@ -21,6 +21,7 @@ observeEvent(input$dropdown_btn3,{
 })
   
 genesC <- observeEvent(input$submit_cytokine_network, {
+  req(input$refresh == 0) #see refresh code in app.R
   `%notin%` = Negate(`%in%`)
   # hide tab A results
   hideElement("plot")

@@ -29,6 +29,7 @@ observeEvent(input$gene_file, {
 })
 
 genes <- observeEvent(input$submit_compass_list,{
+  req(input$refresh == 0) #see refresh code in app.R
   # hide tab B results
   hideElement("plot_B")
   hideElement("download_B")
@@ -93,6 +94,7 @@ genes <- observeEvent(input$submit_compass_list,{
 }, ignoreInit = TRUE)
 
 genes <- observeEvent(input$submit_radar_list,{
+  req(input$refresh == 0) #see refresh code in app.R
   # hide tab B results
   hideElement("plot_B")
   hideElement("download_B")

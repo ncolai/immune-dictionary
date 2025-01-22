@@ -35,6 +35,7 @@ observeEvent(input$dropdown_btn2,{
 
 
 genesB <- observeEvent(input$submit_compass_matrix, {
+  req(input$refresh == 0) #see refresh code in app.R
   `%notin%` = Negate(`%in%`)
   # hide tab A results
   hideElement("plot")
@@ -130,6 +131,7 @@ genesB <- observeEvent(input$submit_compass_matrix, {
 }, ignoreInit = TRUE)
 
 genesB <- observeEvent(input$submit_radar_matrix, {
+  req(input$refresh == 0) #see refresh code in app.R
   `%notin%` = Negate(`%in%`)
   # hide tab A results
   hideElement("plot")
