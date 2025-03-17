@@ -36,11 +36,11 @@ genes <- observeEvent(input$submit_compass_list,{
   hideElement("download_table_B")
   hideElement("radio_btns_B")
   
-  #hide tab C results
-  hideElement("plot_C")
-  hideElement("download_C")
-  hideElement("table_C")
-  hideElement("download_table_C")
+  # #hide tab C results
+  # hideElement("plot_C")
+  # hideElement("download_C")
+  # hideElement("table_C")
+  # hideElement("download_table_C")
   
   if (input$inputGene != '' & input$inputCell != ' '){
     split_genes_vector <- split_input(input$inputGene)

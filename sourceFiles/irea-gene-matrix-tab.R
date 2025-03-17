@@ -42,11 +42,11 @@ genesB <- observeEvent(input$submit_compass_matrix, {
   hideElement("table")
   hideElement("download_table")
   
-  #hide tab C results
-  hideElement("plot_C")
-  hideElement("download_C")
-  hideElement("table_C")
-  hideElement("download_table_C")
+  # #hide tab C results
+  # hideElement("plot_C")
+  # hideElement("download_C")
+  # hideElement("table_C")
+  # hideElement("download_table_C")
   
   if ((!is.null(input$matrix_file) | input$sample_matrix) & input$inputCell_tabB != ' '){
     if (input$sample_matrix){

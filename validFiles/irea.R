@@ -173,277 +173,277 @@ output$pageStub <- renderUI(fluidPage(
                            # HTML("<br>"),
                            # actionButton("submit_network_matrix", "To be announced!", class = "btn-block")
                   )
-                  , 
-                  tabPanel("Network", value = "C",
-                           h3(),
-                           HTML('<br>'),     
-                           
-                           # tags$script(HTML(jscode_upload_txt)),
-                           div(style=
-                                 'padding: 0;
-                        margin: 0;
-                        color: black;
-                        font-weight: bold;
-                        font-size: 1em;
-                        white-space: normal;
-                        width: 100%;
-                        text-align: left;
-                        margin-bottom: 5px;',
-                               HTML('Upload an Excel file containing the gene information for Cytokine Network Analysis. See example for how to format excel file.')
-                           ),
-                           
-                           fileInput("network_matrix_singlefile", label = NULL,
-                                     multiple = FALSE,
-                                     accept = c(".txt", ".xlsx", ".xls")),
-                           materialSwitch(
-                             inputId = "sample_network_matrix_singlefile",
-                             label = "Use Example File", 
-                             status = "primary",
-                             right = TRUE
-                           ),
-
-                           div(style='overflow-x: auto;',
-                               downloadButton("download_network_matrix", "Download Example File", class = "btn-link")),
-                           HTML('<hr>'),
-                           div(style=
-                                 'padding: 0;
-                        margin: 0;
-                        color: black;
-                        font-weight: bold;
-                        font-size: 1em;
-                        white-space: normal;
-                        width: 100%;
-                        text-align: left;
-                        margin-bottom: 5px;',
-                               HTML('Choose 2 or more cells to analyze'),
-                           ),
-                           fluidRow(
-                             # First column
-                             column(6,
-                                    #h4("B cell"),
-                                    #materialSwitch(
-                                    #  inputId = "sample_network_b_cell",
-                                    #  label = "Analyze B Cell", 
-                                    #  status = "primary",
-                                    #  right = TRUE
-                                    #),
-                                    
-                                    h4("CD4+ T cell"),
-                                    materialSwitch(
-                                      inputId = "sample_network_t_cell_cd4",
-                                      label = "Analyze CD4+ T Cell", 
-                                      status = "primary",
-                                      right = TRUE
-                                    ),
-                                    
-                                    h4("CD8+ T cell"),
-                                    materialSwitch(
-                                      inputId = "sample_network_t_cell_cd8",
-                                      label = "Analyze CD8+ T Cell", 
-                                      status = "primary",
-                                      right = TRUE
-                                    ),
-                                    
-                                    #h4("γδ T cell"),
-                                    #materialSwitch(
-                                    #  inputId = "sample_network_t_cell_gd",
-                                    #  label = "Analyze gamma-delta T Cell", 
-                                    #  status = "primary",
-                                    #  right = TRUE
-                                    #),
-                                    
-                                    h4("Treg"),
-                                    materialSwitch(
-                                      inputId = "sample_network_treg",
-                                      label = "Analyze Treg Cell", 
-                                      status = "primary",
-                                      right = TRUE
-                                    ),
-                                    
-                                    h4("NK cell"),
-                                    materialSwitch(
-                                      inputId = "sample_network_nk_cell",
-                                      label = "Analyze NK Cell", 
-                                      status = "primary",
-                                      right = TRUE
-                                    ),
-                                    
-                                    h4("pDC"),
-                                    materialSwitch(
-                                      inputId = "sample_network_pdc",
-                                      label = "Analyze pDC Cell", 
-                                      status = "primary",
-                                      right = TRUE
-                                    ),
-                                    HTML('<hr>')
-                             ), 
-                             # Second column
-                             column(6,
-                                    h4("cDC1"),
-                                    materialSwitch(
-                                      inputId = "sample_network_cdc1",
-                                      label = "Analyze cDC1 Cell", 
-                                      status = "primary",
-                                      right = TRUE
-                                    ),
-                                    h4("cDC2"),
-                                    materialSwitch(
-                                      inputId = "sample_network_cdc2",
-                                      label = "Analyze cDC2 Cell", 
-                                      status = "primary",
-                                      right = TRUE
-                                    ),
-                                    h4("MigDC"),
-                                    materialSwitch(
-                                      inputId = "sample_network_migdc",
-                                      label = "Analyze MigDC Cell", 
-                                      status = "primary",
-                                      right = TRUE
-                                    ),
-                                    #h4("Langerhans"),
-                                    #materialSwitch(
-                                    #  inputId = "sample_network_langerhans",
-                                    #  label = "Analyze Langerhans Cell", 
-                                    #  status = "primary",
-                                    #  right = TRUE
-                                    #),
-                                    h4("Macrophage"),
-                                    materialSwitch(
-                                      inputId = "sample_network_macrophage",
-                                      label = "Analyze Macrophage Cell", 
-                                      status = "primary",
-                                      right = TRUE
-                                    ),
-                                    #h4("Monocyte"),
-                                    #materialSwitch(
-                                    #  inputId = "sample_network_monocyte",
-                                    #  label = "Analyze Monocyte Cell", 
-                                    #  status = "primary",
-                                    #  right = TRUE
-                                    #),
-                                    h4("Neutrophil"),
-                                    materialSwitch(
-                                      inputId = "sample_network_neutrophil",
-                                      label = "Analyze Neutrophil Cell", 
-                                      status = "primary",
-                                      right = TRUE
-                                    ),
-                             )
-                           ),
-
-                           # fluidRow(
-                           #   # First column
-                           #   column(6,
-                           #          h4("B cell"),
-                           #          fileInput("network_matrix_file_B_cell", label = NULL,
-                           #                    multiple = FALSE,
-                           #                    accept = c(".txt", ".xlsx", ".xls"),
-                           #                    placeholder = "Select file"),
-                           #          
-                           #          h4("CD4+ T cell"),
-                           #          fileInput("network_matrix_file_T_cell_CD4", label = NULL,
-                           #                    multiple = FALSE,
-                           #                    accept = c(".txt", ".xlsx", ".xls"),
-                           #                    placeholder = "Select file"),
-                           #          
-                           #          h4("CD8+ T cell"),
-                           #          fileInput("network_matrix_file_T_cell_CD8", label = NULL,
-                           #                    multiple = FALSE,
-                           #                    accept = c(".txt", ".xlsx", ".xls"),
-                           #                    placeholder = "Select file"),
-                           #          
-                           #          h4("γδ T cell"),
-                           #          fileInput("network_matrix_file_T_cell_gd", label = NULL,
-                           #                    multiple = FALSE,
-                           #                    accept = c(".txt", ".xlsx", ".xls"),
-                           #                    placeholder = "Select file"),
-                           #          
-                           #          h4("Treg"),
-                           #          fileInput("network_matrix_file_Treg", label = NULL,
-                           #                    multiple = FALSE,
-                           #                    accept = c(".txt", ".xlsx", ".xls"),
-                           #                    placeholder = "Select file"),
-                           #          
-                           #          h4("NK cell"),
-                           #          fileInput("network_matrix_file_NK_cell", label = NULL,
-                           #                    multiple = FALSE,
-                           #                    accept = c(".txt", ".xlsx", ".xls"),
-                           #                    placeholder = "Select file"),
-                           #          
-                           #          h4("pDC"),
-                           #          fileInput("network_matrix_file_pDC", label = NULL,
-                           #                    multiple = FALSE,
-                           #                    accept = c(".txt", ".xlsx", ".xls"),
-                           #                    placeholder = "Select file"),
-                           #          HTML('<hr>')
-                           #   ),
-                           #   
-                           #   # Second column
-                           #   column(6,
-                           #          h4("cDC1"),
-                           #          fileInput("network_matrix_file_cDC1", label = NULL,
-                           #                    multiple = FALSE,
-                           #                    accept = c(".txt", ".xlsx", ".xls"),
-                           #                    placeholder = "Select file"),
-                           #          h4("cDC2"),
-                           #          fileInput("network_matrix_file_cDC2", label = NULL,
-                           #                    multiple = FALSE,
-                           #                    accept = c(".txt", ".xlsx", ".xls"),
-                           #                    placeholder = "Select file"),
-                           #          h4("MigDC"),
-                           #          fileInput("network_matrix_file_MigDC", label = NULL,
-                           #                    multiple = FALSE,
-                           #                    accept = c(".txt", ".xlsx", ".xls"),
-                           #                    placeholder = "Select file"),
-                           #          h4("Langerhans"),
-                           #          fileInput("network_matrix_file_Langerhans", label = NULL,
-                           #                    multiple = FALSE,
-                           #                    accept = c(".txt", ".xlsx", ".xls"),
-                           #                    placeholder = "Select file"),
-                           #          h4("Macrophage"),
-                           #          fileInput("network_matrix_file_Macrophage", label = NULL,
-                           #                    multiple = FALSE,
-                           #                    accept = c(".txt", ".xlsx", ".xls"),
-                           #                    placeholder = "Select file"),
-                           #          h4("Monocyte"),
-                           #          fileInput("network_matrix_file_Monocyte", label = NULL,
-                           #                    multiple = FALSE,
-                           #                    accept = c(".txt", ".xlsx", ".xls"),
-                           #                    placeholder = "Select file"),
-                           #          h4("Neutrophil"),
-                           #          fileInput("network_matrix_file_Neutrophil", label = NULL,
-                           #                    multiple = FALSE,
-                           #                    accept = c(".txt", ".xlsx", ".xls"),
-                           #                    placeholder = "Select file"),
-                           #   )
-                           # ),
-                           actionButton("dropdown_btn3", label = ' Optional Parameters', icon = icon("chevron-down"),
-                                        class = "btn-link", style = 'text-decoration: none;
-                  padding: 0;
-                  margin: 0;
-                  color: black;
-                  font-weight: bold;
-                  font-size: 1em;
-                  white-space: normal;
-                  width: 100%;
-                  text-align: left;'),
-                           HTML('<br><br>'),
-                           hidden(numericInput("network_genediff_cutoff", "Gene Diff Cutoff", 0.25, min = 0, max = 1, step = 0.05)),
-                           #hidden(radioGroupButtons(inputId = "speciesInputC", label = "Species", choices = c("Mouse", "Human"), justified = TRUE)),
-                           radioGroupButtons(inputId = "speciesInputC", 
-                                             label = "Species", 
-                                             choices = c("Mouse", "Human"), justified = TRUE),
-                           #radioButtons(inputId="network_type_cytokines", label="Choose Cytokine Input",
-                           #             choices=c("All cytokines" = "all", "Individual cytokines" = "individual")),
-                           #selectInput("network_inputCytokines", "Choose Cytokine Input", 
-                                       #choices = cytokineList,
-                                       #multiple = TRUE),
-                           h3("Submit"),
-                           actionButton("submit_cytokine_network", "Analyze Cytokine Network", class = "btn-block"),
-                           HTML('<hr>'), 
-                           p("It takes ~10min per cell type. Simply leave the browser on and come back later to see the results.")
-                  )
-                  
+                  # , 
+                  # tabPanel("Network", value = "C",
+                  #          h3(),
+                  #          HTML('<br>'),     
+                  #          
+                  #          # tags$script(HTML(jscode_upload_txt)),
+                  #          div(style=
+                  #                'padding: 0;
+                  #       margin: 0;
+                  #       color: black;
+                  #       font-weight: bold;
+                  #       font-size: 1em;
+                  #       white-space: normal;
+                  #       width: 100%;
+                  #       text-align: left;
+                  #       margin-bottom: 5px;',
+                  #              HTML('Upload an Excel file containing the gene information for Cytokine Network Analysis. See example for how to format excel file.')
+                  #          ),
+                  #          
+                  #          fileInput("network_matrix_singlefile", label = NULL,
+                  #                    multiple = FALSE,
+                  #                    accept = c(".txt", ".xlsx", ".xls")),
+                  #          materialSwitch(
+                  #            inputId = "sample_network_matrix_singlefile",
+                  #            label = "Use Example File", 
+                  #            status = "primary",
+                  #            right = TRUE
+                  #          ),
+# 
+                  #          div(style='overflow-x: auto;',
+                  #              downloadButton("download_network_matrix", "Download Example File", class = "btn-link")),
+                  #          HTML('<hr>'),
+                  #          div(style=
+                  #                'padding: 0;
+                  #       margin: 0;
+                  #       color: black;
+                  #       font-weight: bold;
+                  #       font-size: 1em;
+                  #       white-space: normal;
+                  #       width: 100%;
+                  #       text-align: left;
+                  #       margin-bottom: 5px;',
+                  #              HTML('Choose 2 or more cells to analyze'),
+                  #          ),
+                  #          fluidRow(
+                  #            # First column
+                  #            column(6,
+                  #                   #h4("B cell"),
+                  #                   #materialSwitch(
+                  #                   #  inputId = "sample_network_b_cell",
+                  #                   #  label = "Analyze B Cell", 
+                  #                   #  status = "primary",
+                  #                   #  right = TRUE
+                  #                   #),
+                  #                   
+                  #                   h4("CD4+ T cell"),
+                  #                   materialSwitch(
+                  #                     inputId = "sample_network_t_cell_cd4",
+                  #                     label = "Analyze CD4+ T Cell", 
+                  #                     status = "primary",
+                  #                     right = TRUE
+                  #                   ),
+                  #                   
+                  #                   h4("CD8+ T cell"),
+                  #                   materialSwitch(
+                  #                     inputId = "sample_network_t_cell_cd8",
+                  #                     label = "Analyze CD8+ T Cell", 
+                  #                     status = "primary",
+                  #                     right = TRUE
+                  #                   ),
+                  #                   
+                  #                   #h4("γδ T cell"),
+                  #                   #materialSwitch(
+                  #                   #  inputId = "sample_network_t_cell_gd",
+                  #                   #  label = "Analyze gamma-delta T Cell", 
+                  #                   #  status = "primary",
+                  #                   #  right = TRUE
+                  #                   #),
+                  #                   
+                  #                   h4("Treg"),
+                  #                   materialSwitch(
+                  #                     inputId = "sample_network_treg",
+                  #                     label = "Analyze Treg Cell", 
+                  #                     status = "primary",
+                  #                     right = TRUE
+                  #                   ),
+                  #                   
+                  #                   h4("NK cell"),
+                  #                   materialSwitch(
+                  #                     inputId = "sample_network_nk_cell",
+                  #                     label = "Analyze NK Cell", 
+                  #                     status = "primary",
+                  #                     right = TRUE
+                  #                   ),
+                  #                   
+                  #                   h4("pDC"),
+                  #                   materialSwitch(
+                  #                     inputId = "sample_network_pdc",
+                  #                     label = "Analyze pDC Cell", 
+                  #                     status = "primary",
+                  #                     right = TRUE
+                  #                   ),
+                  #                   HTML('<hr>')
+                  #            ), 
+                  #            # Second column
+                  #            column(6,
+                  #                   h4("cDC1"),
+                  #                   materialSwitch(
+                  #                     inputId = "sample_network_cdc1",
+                  #                     label = "Analyze cDC1 Cell", 
+                  #                     status = "primary",
+                  #                     right = TRUE
+                  #                   ),
+                  #                   h4("cDC2"),
+                  #                   materialSwitch(
+                  #                     inputId = "sample_network_cdc2",
+                  #                     label = "Analyze cDC2 Cell", 
+                  #                     status = "primary",
+                  #                     right = TRUE
+                  #                   ),
+                  #                   h4("MigDC"),
+                  #                   materialSwitch(
+                  #                     inputId = "sample_network_migdc",
+                  #                     label = "Analyze MigDC Cell", 
+                  #                     status = "primary",
+                  #                     right = TRUE
+                  #                   ),
+                  #                   #h4("Langerhans"),
+                  #                   #materialSwitch(
+                  #                   #  inputId = "sample_network_langerhans",
+                  #                   #  label = "Analyze Langerhans Cell", 
+                  #                   #  status = "primary",
+                  #                   #  right = TRUE
+                  #                   #),
+                  #                   h4("Macrophage"),
+                  #                   materialSwitch(
+                  #                     inputId = "sample_network_macrophage",
+                  #                     label = "Analyze Macrophage Cell", 
+                  #                     status = "primary",
+                  #                     right = TRUE
+                  #                   ),
+                  #                   #h4("Monocyte"),
+                  #                   #materialSwitch(
+                  #                   #  inputId = "sample_network_monocyte",
+                  #                   #  label = "Analyze Monocyte Cell", 
+                  #                   #  status = "primary",
+                  #                   #  right = TRUE
+                  #                   #),
+                  #                   h4("Neutrophil"),
+                  #                   materialSwitch(
+                  #                     inputId = "sample_network_neutrophil",
+                  #                     label = "Analyze Neutrophil Cell", 
+                  #                     status = "primary",
+                  #                     right = TRUE
+                  #                   ),
+                  #            )
+                  #          ),
+# 
+                  #          # fluidRow(
+                  #          #   # First column
+                  #          #   column(6,
+                  #          #          h4("B cell"),
+                  #          #          fileInput("network_matrix_file_B_cell", label = NULL,
+                  #          #                    multiple = FALSE,
+                  #          #                    accept = c(".txt", ".xlsx", ".xls"),
+                  #          #                    placeholder = "Select file"),
+                  #          #          
+                  #          #          h4("CD4+ T cell"),
+                  #          #          fileInput("network_matrix_file_T_cell_CD4", label = NULL,
+                  #          #                    multiple = FALSE,
+                  #          #                    accept = c(".txt", ".xlsx", ".xls"),
+                  #          #                    placeholder = "Select file"),
+                  #          #          
+                  #          #          h4("CD8+ T cell"),
+                  #          #          fileInput("network_matrix_file_T_cell_CD8", label = NULL,
+                  #          #                    multiple = FALSE,
+                  #          #                    accept = c(".txt", ".xlsx", ".xls"),
+                  #          #                    placeholder = "Select file"),
+                  #          #          
+                  #          #          h4("γδ T cell"),
+                  #          #          fileInput("network_matrix_file_T_cell_gd", label = NULL,
+                  #          #                    multiple = FALSE,
+                  #          #                    accept = c(".txt", ".xlsx", ".xls"),
+                  #          #                    placeholder = "Select file"),
+                  #          #          
+                  #          #          h4("Treg"),
+                  #          #          fileInput("network_matrix_file_Treg", label = NULL,
+                  #          #                    multiple = FALSE,
+                  #          #                    accept = c(".txt", ".xlsx", ".xls"),
+                  #          #                    placeholder = "Select file"),
+                  #          #          
+                  #          #          h4("NK cell"),
+                  #          #          fileInput("network_matrix_file_NK_cell", label = NULL,
+                  #          #                    multiple = FALSE,
+                  #          #                    accept = c(".txt", ".xlsx", ".xls"),
+                  #          #                    placeholder = "Select file"),
+                  #          #          
+                  #          #          h4("pDC"),
+                  #          #          fileInput("network_matrix_file_pDC", label = NULL,
+                  #          #                    multiple = FALSE,
+                  #          #                    accept = c(".txt", ".xlsx", ".xls"),
+                  #          #                    placeholder = "Select file"),
+                  #          #          HTML('<hr>')
+                  #          #   ),
+                  #          #   
+                  #          #   # Second column
+                  #          #   column(6,
+                  #          #          h4("cDC1"),
+                  #          #          fileInput("network_matrix_file_cDC1", label = NULL,
+                  #          #                    multiple = FALSE,
+                  #          #                    accept = c(".txt", ".xlsx", ".xls"),
+                  #          #                    placeholder = "Select file"),
+                  #          #          h4("cDC2"),
+                  #          #          fileInput("network_matrix_file_cDC2", label = NULL,
+                  #          #                    multiple = FALSE,
+                  #          #                    accept = c(".txt", ".xlsx", ".xls"),
+                  #          #                    placeholder = "Select file"),
+                  #          #          h4("MigDC"),
+                  #          #          fileInput("network_matrix_file_MigDC", label = NULL,
+                  #          #                    multiple = FALSE,
+                  #          #                    accept = c(".txt", ".xlsx", ".xls"),
+                  #          #                    placeholder = "Select file"),
+                  #          #          h4("Langerhans"),
+                  #          #          fileInput("network_matrix_file_Langerhans", label = NULL,
+                  #          #                    multiple = FALSE,
+                  #          #                    accept = c(".txt", ".xlsx", ".xls"),
+                  #          #                    placeholder = "Select file"),
+                  #          #          h4("Macrophage"),
+                  #          #          fileInput("network_matrix_file_Macrophage", label = NULL,
+                  #          #                    multiple = FALSE,
+                  #          #                    accept = c(".txt", ".xlsx", ".xls"),
+                  #          #                    placeholder = "Select file"),
+                  #          #          h4("Monocyte"),
+                  #          #          fileInput("network_matrix_file_Monocyte", label = NULL,
+                  #          #                    multiple = FALSE,
+                  #          #                    accept = c(".txt", ".xlsx", ".xls"),
+                  #          #                    placeholder = "Select file"),
+                  #          #          h4("Neutrophil"),
+                  #          #          fileInput("network_matrix_file_Neutrophil", label = NULL,
+                  #          #                    multiple = FALSE,
+                  #          #                    accept = c(".txt", ".xlsx", ".xls"),
+                  #          #                    placeholder = "Select file"),
+                  #          #   )
+                  #          # ),
+                  #          actionButton("dropdown_btn3", label = ' Optional Parameters', icon = icon("chevron-down"),
+                  #                       class = "btn-link", style = 'text-decoration: none;
+                  # padding: 0;
+                  # margin: 0;
+                  # color: black;
+                  # font-weight: bold;
+                  # font-size: 1em;
+                  # white-space: normal;
+                  # width: 100%;
+                  # text-align: left;'),
+                  #          HTML('<br><br>'),
+                  #          hidden(numericInput("network_genediff_cutoff", "Gene Diff Cutoff", 0.25, min = 0, max = 1, step = 0.05)),
+                  #          #hidden(radioGroupButtons(inputId = "speciesInputC", label = "Species", choices = c("Mouse", "Human"), justified = TRUE)),
+                  #          radioGroupButtons(inputId = "speciesInputC", 
+                  #                            label = "Species", 
+                  #                            choices = c("Mouse", "Human"), justified = TRUE),
+                  #          #radioButtons(inputId="network_type_cytokines", label="Choose Cytokine Input",
+                  #          #             choices=c("All cytokines" = "all", "Individual cytokines" = "individual")),
+                  #          #selectInput("network_inputCytokines", "Choose Cytokine Input", 
+                  #                      #choices = cytokineList,
+                  #                      #multiple = TRUE),
+                  #          h3("Submit"),
+                  #          actionButton("submit_cytokine_network", "Analyze Cytokine Network", class = "btn-block"),
+                  #          HTML('<hr>'), 
+                  #          p("It takes ~10min per cell type. Simply leave the browser on and come back later to see the results.")
+                  # )
+                  # 
                   
       ),
       width = 4
@@ -467,13 +467,13 @@ output$pageStub <- renderUI(fluidPage(
       uiOutput("download_table_B"),
       #downloadButton('downloadTable_B_all', "Download all samples")
       
-      # tab C
-      plotOutput('plot_C', height = '500px'),
-      uiOutput("download_C"),
-      # dataTableOutput('table_C'),
-      DT::DTOutput('table_C'),
-      uiOutput("download_table_C")
-      #downloadButton('downloadTable_C_all', "Download all samples")
+      # # tab C
+      # plotOutput('plot_C', height = '500px'),
+      # uiOutput("download_C"),
+      # # dataTableOutput('table_C'),
+      # DT::DTOutput('table_C'),
+      # uiOutput("download_table_C")
+      # #downloadButton('downloadTable_C_all', "Download all samples")
     ))))
 
 
