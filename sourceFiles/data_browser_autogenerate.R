@@ -8,8 +8,11 @@ observe({
   req(input$inputGene)
   if (is.null(input$tabs)) {
   } else if (input$tabs == 'B' && first_visit_tab$B){
-    click('submit_celltype')
-    click('submit_cytokines')
+    #click('submit_celltype')
+    #click('submit_cytokines')
+    data$plot_all1 <- example_plots$heatmap_plot_1
+    data$plot_all2 <- example_plots$heatmap_plot_2
+    #heatmap_data$selectedGenes <- c("Il4i1", "St7", "Isg15")
     first_visit_tab$B = FALSE
   }
 })
